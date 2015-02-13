@@ -33,6 +33,8 @@ private slots:
 
     void on_GoButton_clicked();
 
+    void on_lineMem_returnPressed();
+
 private:
     Ui::MainWindow *ui;
 //    enum {numRegs = 8};
