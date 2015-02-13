@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1018</width>
-    <height>655</height>
+    <width>974</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,9 @@
       </item>
       <item row="0" column="1">
        <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
         <item row="2" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -234,7 +237,7 @@
         <item row="8" column="0">
          <widget class="QLabel" name="label_9">
           <property name="text">
-           <string>R8</string>
+           <string>PC</string>
           </property>
          </widget>
         </item>
@@ -65902,7 +65905,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1018</width>
+     <width>974</width>
      <height>25</height>
     </rect>
    </property>
