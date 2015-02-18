@@ -18,6 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void createGrid();
+    void setCurrentRow(int rowId);
 private slots:
     void on_actionOpen_triggered();
     

@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    lc3sim.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    lc3sim.h
 
 FORMS    += mainwindow.ui

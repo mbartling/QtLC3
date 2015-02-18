@@ -3,6 +3,10 @@
 #include <QMessageBox>
 #include <QString>
 #include <QDebug>
+#include <QFileDialog>
+
+QString int2lc3str(int num);
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -26,7 +30,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    
+    QString filename;
+    filename = QFileDialog::getOpenFileName(this, tr("Open Program"), QDir::currentPath(), tr("Object Files (*.obj);;All files (*.*)"));
 }
 
 void MainWindow::on_actionReset_triggered()
@@ -68,6 +73,10 @@ int lc3hex2int(QString& mStr){
 
 }
 
+QString int2lc3str(int num){
+    return QString("x%1").arg(num,4, 16, QChar('0'));
+}
+
 void MainWindow::on_GoButton_clicked()
 {
     QString mAddr = ui->lineMem->text();
@@ -88,4 +97,8 @@ void MainWindow::on_lineMem_returnPressed()
     if(ok){
         ui->tableMem->setCurrentCell(mLoc, 1);
     }
+}
+void MainWindow::setCurrentRow(int rowId){
+    ui->tableMem->setCurrentCell(rowId, 1);
+
 }
