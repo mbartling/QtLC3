@@ -6,6 +6,7 @@
 #include <QFileDialog>
 
 QString int2lc3str(int num);
+QString GetTranslation(QString mInst);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,10 +17,15 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i = 0; i < 65536; ++i){
           QTableWidgetItem* mItem = new QTableWidgetItem;
           QTableWidgetItem* mItemD = new QTableWidgetItem;
-          mItemD->setText("x0000");
+          QTableWidgetItem* mItemT = new QTableWidgetItem;
+          QString nop = "x0000";
+          QString trans = GetTranslation(nop);
+          mItemD->setText(nop);
           mItem->setText("x" + QString("%1").arg(i,4, 16, QChar('0')));
+          mItemT->setText(trans);
           ui->tableMem->setItem(i,1,mItem);
           ui->tableMem->setItem(i,2,mItemD);
+          ui->tableMem->setItem(i,3,mItemT);
     }
 }
 
@@ -101,4 +107,11 @@ void MainWindow::on_lineMem_returnPressed()
 void MainWindow::setCurrentRow(int rowId){
     ui->tableMem->setCurrentCell(rowId, 1);
 
+}
+QString GetTranslation(QString mInst){
+    QString res;
+    if(mInst == "x0000") res = "NOP";
+    else res = ".FILL " + mInst;
+
+    return res;
 }
