@@ -115,3 +115,8 @@ QString GetTranslation(QString mInst){
 
     return res;
 }
+
+void MainWindow::on_actionConsole_triggered()
+{
+
+}

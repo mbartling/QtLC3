@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QGridLayout" name="gridLayout_2" columnstretch="20,0,0,0">
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="20,0">
       <item row="1" column="0">
        <widget class="QLineEdit" name="lineMem">
         <property name="text">
@@ -65922,10 +65922,13 @@
      <string>Simulator</string>
     </property>
     <addaction name="actionReset"/>
+    <addaction name="separator"/>
     <addaction name="actionNext"/>
     <addaction name="actionStep"/>
     <addaction name="actionContinue"/>
     <addaction name="actionStep_Out"/>
+    <addaction name="separator"/>
+    <addaction name="actionConsole"/>
    </widget>
    <widget class="QMenu" name="menuBreakpoints">
     <property name="title">
@@ -66000,6 +66003,11 @@
   <action name="actionStep_Out">
    <property name="text">
     <string>Step Out</string>
+   </property>
+  </action>
+  <action name="actionConsole">
+   <property name="text">
+    <string>Console</string>
    </property>
   </action>
  </widget>

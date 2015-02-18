@@ -36,6 +36,8 @@ private slots:
 
     void on_lineMem_returnPressed();
 
+    void on_actionConsole_triggered();
+
 private:
     Ui::MainWindow *ui;
 //    enum {numRegs = 8};
