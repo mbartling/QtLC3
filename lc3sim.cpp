@@ -74,36 +74,54 @@ void InstructionDecode(uint16_t inst) {
                      break;
                  }
         case 0x5:{
+                     opStr = "AND";
+                     setsCC = true;
                      break;
                  }
         case 0x6:{
+                     opStr = "LDR";
+                     setsCC = true;
                      break;
                  }
         case 0x7:{
+                     opStr = "STR";
+                     setsCC = false;
                      break;
                  }
         case 0x8:{
+                     opStr = "RTI";
+                     setsCC = false;
                      break;
                  }
         case 0x9:{
+                     opStr = "NOT";
+                     setsCC = true;
                      break;
                  }
         case 0xA:{
+                     opStr = "LDI";
+                     setsCC = true;
                      break;
                  }
         case 0xB:{
+                     opStr = "STI";
+                     setsCC = false;
                      break;
                  }
         case 0xC:{
+                     opStr = inst == 0xC1C0 ? "RET" : "JMP";
+                     setsCC = false;
                      break;
                  }
-        case 0xD:{
+        case 0xD:{ // reserved
                      break;
                  }
         case 0xE:{
+                     opStr = "LEA";
                      break;
                  }
         case 0xF:{
+                     opStr = "TRAP";
                      break;
                  }
     }
