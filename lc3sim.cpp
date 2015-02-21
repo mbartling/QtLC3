@@ -41,6 +41,7 @@ void InstructionDecode(uint16_t inst){
         if(P) opStr += "p";
 
         setsCC = false;
+        break;
     }
         case 0x1:{
             opStr = "ADD";
@@ -50,15 +51,17 @@ void InstructionDecode(uint16_t inst){
                 alt = 1;
             }
             setsCC = true;
-
+            break;
  }
         case 0x2:{
             opStr = "LD";
             setsCC = true;
+            break;
  }
         case 0x3:{
         opStr = "ST";
         setsCC = false;
+        break;
  }
         case 0x4:{
         opStr = "JSR";
@@ -68,40 +71,40 @@ void InstructionDecode(uint16_t inst){
             opStr += "R";
             alt = 1;
         }
-
+        break;
  }
         case 0x5:{
-
+        break;
  }
         case 0x6:{
-
+        break;
  }
         case 0x7:{
-
+        break;
  }
         case 0x8:{
-
+        break;
  }
         case 0x9:{
-
+        break;
  }
         case 0xA:{
-
+        break;
  }
         case 0xB:{
-
+        break;
  }
         case 0xC:{
-
+        break;
  }
         case 0xD:{
-
+        break;
  }
         case 0xE:{
-
+        break;
  }
         case 0xF:{
-
+        break;
  }
     }
 }
