@@ -35,7 +35,7 @@ void InstructionDecode(uint16_t inst){
         opStr = "BR";
         N = (int) (inst >> 11) & 0x1;
         Z = (int) (inst >> 10) & 0x1;
-        P = (int) (inst >> 09) & 0x1;
+        P = (int) (inst >>  9) & 0x1;
         if(N) opStr += "n";
         if(Z) opStr += "z";
         if(P) opStr += "p";
