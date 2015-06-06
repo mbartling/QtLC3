@@ -34,11 +34,9 @@ $(TEST): $(OBJS)
 #<Automatic Dependency Generation>
 -include $(DEPS)
 
-%.d: %.cpp
-	@$(CXX) $< $(CXXFLAGS) -MM > $@
 
-%.o: %.d
-	$(CXX) $*.cpp $(DEFS) $(CXXFLAGS) -c -o $@
+%.o: %.cpp
+	$(CXX) -c ${CXXFLAGS} -o $@ $< -M  -MT $@
 
 clean:
 	-rm -rf ${OBJS} ${DEPS} ${TEST}
