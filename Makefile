@@ -31,12 +31,10 @@ test: $(TEST)
 $(TEST): $(OBJS)
 	$(CXX) $^ $(EXTRA_TESTS) $(GTEST_LIB) $(DEFS) $(CXXFLAGS) -pthread -o $@
 
-#<Automatic Dependency Generation>
 -include $(DEPS)
 
-
 %.o: %.cpp
-	$(CXX) -c ${CXXFLAGS} -o $@ $< -M  -MT $@
+	$(CXX) -c ${CXXFLAGS} -MD -o $@ $< -MT ${@:.o=.d}
 
 clean:
 	-rm -rf ${OBJS} ${DEPS} ${TEST}
