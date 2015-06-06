@@ -17,4 +17,5 @@ private:
   vector<uint16_t> memory(ADDRESS_SPACE);
   vector<uint16_t> regs(8);
   uint16_t N, Z, P;
+  uint16_t PC; 
 };
