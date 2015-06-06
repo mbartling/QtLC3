@@ -51,87 +51,88 @@ using std::complex;
 /*********************************************************************/
 // Phase A Tests
 /*********************************************************************/
+simulator sim;
 
 TEST(CheckADD, Register) {
-   setReg(0, 2);
-   setReg(1, 2);
-   setReg(2, (uint16_t) -4);
+   sim.setReg(0, 2);
+   sim.setReg(1, 2);
+   sim.setReg(2, (uint16_t) -4);
 
    doInst(ADDR + SETDR(3) + SETSR1(0) + SETSR2(1)); //2 + 2 =4
-   EXPECT_EQ(4, getReg(3));
+   EXPECT_EQ(4, sim.getReg(3));
 
    doInst(ADDR + SETDR(4) + SETSR1(0) + SETSR2(2)); //2 + -4 = -2
-   EXPECT_EQ(-2, getReg(4));
+   EXPECT_EQ(-2, sim.getReg(4));
 
    doInst(ADDR + SETDR(3) + SETSR1(3) + SETSR2(2)); //4 + -4 = 0
-   EXPECT_EQ(0, getReg(3));
+   EXPECT_EQ(0, sim.getReg(3));
 
 }
 
 TEST(CheckADD, Immediate) {
-   setReg(0, 2);
+   sim.setReg(0, 2);
 
    doInst(ADDI + SETDR(3) + SETSR1(0) + 2); //2 + 2 =4
-   EXPECT_EQ(4, getReg(3));
+   EXPECT_EQ(4, sim.getReg(3));
 
    doInst(ADDI + SETDR(4) + SETSR1(0) + -4); //2 + -4 = -2
-   EXPECT_EQ(-2, getReg(4));
+   EXPECT_EQ(-2, sim.getReg(4));
 
    doInst(ADDI + SETDR(3) + SETSR1(3) + -4); //4 + -4 = 0
-   EXPECT_EQ(0, getReg(3));
+   EXPECT_EQ(0, sim.getReg(3));
 
 }
 
 TEST(CheckAND, Register) {
-   setReg(0, 0x1010);
-   setReg(1, 0xFFFF);
-   setReg(2, 0x1000);
-   setReg(3, 0x0000);
+   sim.setReg(0, 0x1010);
+   sim.setReg(1, 0xFFFF);
+   sim.setReg(2, 0x1000);
+   sim.setReg(3, 0x0000);
 
    doInst(ANDR + SETDR(3) + SETSR1(0) + SETSR2(3)); 
-   EXPECT_EQ(0, getReg(3));
+   EXPECT_EQ(0, sim.getReg(3));
 
    doInst(ANDR + SETDR(4) + SETSR1(0) + SETSR2(1)); 
-   EXPECT_EQ(0x1010, getReg(4));
+   EXPECT_EQ(0x1010, sim.getReg(4));
 
    doInst(ANDR + SETDR(4) + SETSR1(0) + SETSR2(2)); 
-   EXPECT_EQ(0x1000, getReg(4));
+   EXPECT_EQ(0x1000, sim.getReg(4));
 
 }
 
 TEST(CheckAND, Immediate) {
-   setReg(0, 0x1010);
-   setReg(1, 0xFFFF);
-   setReg(2, 0x1000);
-   setReg(3, 0x0000);
+   sim.setReg(0, 0x1010);
+   sim.setReg(1, 0xFFFF);
+   sim.setReg(2, 0x1000);
+   sim.setReg(3, 0x0000);
 
    doInst(ANDI + SETDR(3) + SETSR1(0) + 0x0000); 
-   EXPECT_EQ(0, getReg(3));
+   EXPECT_EQ(0, sim.getReg(3));
 
    doInst(ANDI + SETDR(4) + SETSR1(0) + 0x1F); 
-   EXPECT_EQ(0x1010, getReg(4));
+   EXPECT_EQ(0x1010, sim.getReg(4));
 
    doInst(ANDI + SETDR(4) + SETSR1(1) + 0x10; 
-   EXPECT_EQ(0xFFF0, getReg(4));
+   EXPECT_EQ(0xFFF0, sim.getReg(4));
 
 }
 TEST(CheckNOT, All) {
-   setReg(0, 0x1010);
-   setReg(1, 0xFFFF);
-   setReg(2, 0x1000);
-   setReg(3, 0x0000);
+   sim.setReg(0, 0x1010);
+   sim.setReg(1, 0xFFFF);
+   sim.setReg(2, 0x1000);
+   sim.setReg(3, 0x0000);
 
    doInst(NOT + SETDR(4) + SETSR1(0)); 
-   EXPECT_EQ(~0x1010, getReg(4));
+   EXPECT_EQ(~0x1010, sim.getReg(4));
 
    doInst(NOT + SETDR(4) + SETSR1(1)); 
-   EXPECT_EQ(0, getReg(4));
+   EXPECT_EQ(0, sim.getReg(4));
 
    doInst(NOT + SETDR(4) + SETSR1(2); 
-   EXPECT_EQ(~0x1000, getReg(4));
+   EXPECT_EQ(~0x1000, sim.getReg(4));
 
    doInst(NOT + SETDR(4) + SETSR1(3); 
-   EXPECT_EQ(0xFFFF, getReg(4));
+   EXPECT_EQ(0xFFFF, sim.getReg(4));
 
 }
 int main(int argc, char** argv) {
