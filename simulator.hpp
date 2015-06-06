@@ -27,4 +27,5 @@ private:
         vector<uint16_t> memory;
         vector<uint16_t> regs;
         uint16_t N, Z, P;
+        uint16_t PC;
 };
