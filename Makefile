@@ -5,18 +5,18 @@ GTEST_INC := $(GTEST_DIR)/include
 GTEST_LIB := $(GTEST_DIR)/lib/gtest64.a          #class virtual machine uses this
 #GTEST_LIB = $(GTEST_DIR)/lib/gtest32.a
 #GTEST_LIB = $(GTEST_DIR)/lib/gtest_yosemite.a  #for Apple users
+SRC_DIRS += .
+SRC_DIRS += tests
 
 CXX := g++
 CXXFLAGS += -g
 CXXFLAGS += -I $(GTEST_INC)
+CXXFLAGS += $(addprefix -I ,${SRC_DIRS})
 CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall
 CXXFLAGS += -Wno-sign-compare
 CXXFLAGS += -Werror
 DEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
-
-SRC_DIRS += .
-SRC_DIRS += tests
 
 SRCS := $(wildcard $(addsuffix /*.cpp, ${SRC_DIRS}))
 OBJS := ${SRCS:.cpp=.o}
