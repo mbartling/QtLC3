@@ -3,18 +3,28 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <stdint>
+#include <stdint.h>
 
-constexpr int ADDRESS_SPACE 1<<16;
+constexpr int ADDRESS_SPACE = 1<<16;
+constexpr int NUM_REGS = 8;
 using std::cout;
 using std::endl;
 using std::vector;
 
 class simulator{
 public:
+        simulator(void);
+        bool stepOnce( void );
+        bool doInst( uint16_t );
+        vector<uint16_t> & sliceMem ( uint16_t start, uint16_t stop );
+        uint16_t sliceMem ( uint16_t addr );
+        uint16_t getReg ( int number );
+        bool setReg ( int number , uint16_t newVal);
+        bool getPcsrBit ( char mnemonic );
+        bool setPcsrBit ( char mnemonic , bool newVal);
 
 private:
-  vector<uint16_t> memory(ADDRESS_SPACE);
-  vector<uint16_t> regs(8);
-  uint16_t N, Z, P;
+        vector<uint16_t> memory;
+        vector<uint16_t> regs;
+        uint16_t N, Z, P;
 };
