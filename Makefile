@@ -15,9 +15,12 @@ CXXFLAGS += -Wno-sign-compare
 CXXFLAGS += -Werror
 DEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
 
-SRCS := $(wildcard *.cpp)
-OBJS := $(patsubst %.cpp, %.o, $(SRCS))
-DEPS := $(patsubst %.cpp, %.d, $(SRCS))
+SRC_DIRS += .
+SRC_DIRS += tests
+
+SRCS := $(wildcard $(addsuffix /*.cpp, ${SRC_DIRS}))
+OBJS := ${SRCS:.cpp=.o}
+DEPS := ${SRCS:.cpp=.d}
 TEST := lc3_unittest
 
 all: $(TEST)
@@ -36,7 +39,6 @@ $(TEST): $(OBJS)
 
 %.o: %.d
 	$(CXX) $*.cpp $(DEFS) $(CXXFLAGS) -c -o $@
-#<\Automatic Dependency Generation>
 
 clean:
 	-rm -rf ${OBJS} ${DEPS} ${TEST}
