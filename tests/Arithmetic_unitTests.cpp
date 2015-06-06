@@ -18,8 +18,6 @@ using std::endl;
 using std::string;
 using std::complex;
 
-using namespace epl;
-
 #define SETDR(x) (((x & 0x7) << 9)
 #define SETSR1(x) (((x & 0x7) << 6)
 #define SETBASER(x) (((x & 0x7) << 6)
