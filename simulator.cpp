@@ -19,6 +19,7 @@ void simulator::setNZP( uint16_t result ) {
 
 bool simulator::doInst( uint16_t inst ) {
         uint16_t result = 0;
+        this->PC++;
         switch (inst2opcode(inst)) {
         case ADD:
                 if (inst2steering(inst)) {
@@ -41,11 +42,23 @@ bool simulator::doInst( uint16_t inst ) {
         case NOT:
                 result = ~this->regs[inst2sr1(inst)];
                 break;
+        case LEA:
+                result = this->PC + inst2imm9(inst);
+                break;
         default:
                 return false;
         }
-        this->regs[inst2dr(inst)] = result;
-        this->setNZP(result);
+        switch (inst2opcode(inst)){
+        case ADD:
+        case AND:
+        case NOT:
+        case LEA:
+                this->regs[inst2dr(inst)] = result;
+                this->setNZP(result);
+                break;
+        default:
+                return false;
+        }
         return true;
 }
 
