@@ -13,7 +13,7 @@ bool simulator::stepN( int cycles ) {
         int cyclesElapsed = 0;
         bool exceptionP = true;
         do {
-                exceptionP = this->doInst(this->readMem(this->PC));
+                exceptionP = this->doInst(this->memRead(this->PC));
                 cyclesElapsed++;
         }while (exceptionP && ((cycles < 0) || (cyclesElapsed < cycles)));
         return exceptionP;
@@ -26,7 +26,7 @@ bool simulator::stepN( int cycles ) {
  * @param d [description]
  * @return [description]
  */
-uint16_t simulator::readMem( uint16_t addr ) {
+uint16_t simulator::memRead( uint16_t addr ) {
         return this->memory[addr];
 }
 
@@ -37,7 +37,7 @@ uint16_t simulator::readMem( uint16_t addr ) {
  * @param d [description]
  * @return [description]
  */
-void simulator::writeMem( uint16_t addr, uint16_t newVal ) {
+void simulator::memWrite( uint16_t addr, uint16_t newVal ) {
         this->memory[addr] = newVal;
 }
 

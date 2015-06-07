@@ -36,6 +36,6 @@ private:
         uint16_t N, Z, P, S;
         uint16_t PC;
         void setNZP( uint16_t );
-        uint16_t readMem( uint16_t addr );
-        void writeMem( uint16_t addr, uint16_t newVal );
+        uint16_t memRead( uint16_t addr );
+        void memWrite( uint16_t addr, uint16_t newVal );
 };
