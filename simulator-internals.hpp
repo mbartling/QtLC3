@@ -57,7 +57,7 @@ static inline bool inst2steering( uint16_t inst ) {
 
 static inline uint16_t inst2imm5( uint16_t inst ) {
         if ((inst & (1 << 4)) >> 4) {
-                return inst | (0x7F << 5);
+                return inst | (0x7FF << 5);
         } else {
                 return inst & 0x1F;
         }
