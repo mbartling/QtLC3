@@ -23,6 +23,8 @@ public:
         bool setReg ( int number , uint16_t newVal);
         bool getPcsrBit ( char mnemonic );
         bool setPcsrBit ( char mnemonic , bool newVal);
+        uint16_t getPC(void);
+        bool setPC(uint16_t);
 
 private:
         vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
