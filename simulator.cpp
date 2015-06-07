@@ -94,6 +94,21 @@ bool simulator::doInst( uint16_t inst ) {
                         this->PC = this->regs[inst2sr1(inst)];
                 break;
 
+        case TRAP:
+                this->regs[7] = this->PC;
+                this->PC = inst2trapvec8(inst);
+                break;
+
+        case RTI:
+                if (this->S) return false;
+                PC = this->memory[this->regs[6]];
+                this->regs[6]++;
+                this->S = (this->memory[this->regs[6]] & (1 << 15)) != 0;
+                this->N = (this->memory[this->regs[6]] & (1 << 2))  != 0;
+                this->Z = (this->memory[this->regs[6]] & (1 << 1))  != 0;
+                this->P = (this->memory[this->regs[6]] & (1 << 0))  != 0;
+                this->regs[6]++;
+                break;
 
         default:
                 return false;
@@ -115,6 +130,8 @@ bool simulator::doInst( uint16_t inst ) {
         case JSR:
         case JMP:
         case BR:
+        case TRAP:
+        case RTI:
                 break;
         case STI:
                 result = this->memory[result];
@@ -146,6 +163,9 @@ bool simulator::getPcsrBit( char mnemonic ) {
         case 'p':
         case 'P':
                 return this->P == 1;
+        case 's':
+        case 'S':
+                return this->S == 1;
         default:
                 return false;
 

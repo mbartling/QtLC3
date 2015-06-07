@@ -34,7 +34,7 @@ public:
 
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
-        uint16_t N, Z, P;
+        uint16_t N, Z, P, S;
         uint16_t PC;
         void setNZP( uint16_t );
 };
