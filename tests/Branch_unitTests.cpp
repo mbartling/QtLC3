@@ -233,11 +233,11 @@ TEST(CheckJSR, All) {
    sim1.doInst(JSR | offSet9);
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
- 
+
    sim1.setPC(0x3002);
    currPC = sim1.getPC() + 1;
-   offSet9 = (uint16_t) -1000;
-   sim1.doInst(JSR | offSet9);
+   offSet9 = ((uint16_t) -1000);
+   sim1.doInst(JSR | (offSet9 & 0x7FF));
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
 
@@ -250,8 +250,8 @@ TEST(CheckJSR, All) {
 
    sim1.setPC(0x3002);
    currPC = sim1.getPC() + 1;
-   offSet9 = (uint16_t) 1 << 10;
-   sim1.doInst(JSR | offSet9);
+   offSet9 = (uint16_t) -1024;
+   sim1.doInst(JSR | (offSet9 &0x7FF));
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
 }

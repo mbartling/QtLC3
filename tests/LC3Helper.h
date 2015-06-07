@@ -22,7 +22,7 @@
 #define LDR  0x6000
 #define LEA  0xE000
 #define NOT  0x903F
-#define RET  0xC000
+#define RET  0xC1C0
 #define RTI  0x8000
 #define ST   0x3000
 #define STI  0xB000
