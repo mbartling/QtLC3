@@ -107,19 +107,19 @@ TEST(CheckAND, Register) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   sim.doInst(ANDR | SETDR(3) | SETSR1(0) | SETSR2(3)); 
+   sim.doInst(ANDR | SETDR(3) | SETSR1(0) | SETSR2(3));
    EXPECT_EQ(0, sim.getReg(3));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(true, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
-   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(1)); 
+   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(1));
    EXPECT_EQ(0x1010, sim.getReg(4));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(true, sim.getPcsrBit('p'));
 
-   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(2)); 
+   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(2));
    EXPECT_EQ(0x1000, sim.getReg(4));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
@@ -133,24 +133,23 @@ TEST(CheckAND, Immediate) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   sim.doInst(ANDI | SETDR(3) | SETSR1(0) | 0x0000); 
+   sim.doInst(ANDI | SETDR(3) | SETSR1(0) | 0x0000);
    EXPECT_EQ(0, sim.getReg(3));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(true, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
-   sim.doInst(ANDI | SETDR(4) | SETSR1(0) | 0x1F); 
+   sim.doInst(ANDI | SETDR(4) | SETSR1(0) | 0x1F);
    EXPECT_EQ(0x1010, sim.getReg(4));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(true, sim.getPcsrBit('p'));
 
-   sim.doInst(ANDI | SETDR(4) | SETSR1(1) | 0x10); 
+   sim.doInst(ANDI | SETDR(4) | SETSR1(1) | 0x10);
    EXPECT_EQ(0xFFF0, sim.getReg(4));
    EXPECT_EQ(true, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
-
 }
 
 TEST(CheckNOT, All) {
@@ -159,30 +158,53 @@ TEST(CheckNOT, All) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   sim.doInst(NOT | SETDR(4) | SETSR1(0)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(0));
    EXPECT_EQ((uint16_t)~0x1010, sim.getReg(4));
    EXPECT_EQ(true, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
-   sim.doInst(NOT | SETDR(4) | SETSR1(1)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(1));
    EXPECT_EQ(0, sim.getReg(4));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(true, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
-   sim.doInst(NOT | SETDR(4) | SETSR1(2)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(2));
    EXPECT_EQ((uint16_t)~0x1000, sim.getReg(4));
    EXPECT_EQ(true, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
-   sim.doInst(NOT | SETDR(4) | SETSR1(3)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(3));
    EXPECT_EQ((uint16_t)0xFFFF, sim.getReg(4));
    EXPECT_EQ(true, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(false, sim.getPcsrBit('p'));
 
+}
+
+TEST(CheckLEA, Immediate) {
+   sim.setPC(0x1010);
+   sim.doInst(LEA |  0x0000);
+   EXPECT_EQ(0x1011, sim.getPC());
+   EXPECT_EQ(false, sim.getPcsrBit('n'));
+   EXPECT_EQ(false, sim.getPcsrBit('z'));
+   EXPECT_EQ(true, sim.getPcsrBit('p'));
+
+   sim.setPC(0x8008);
+   sim.doInst(LEA | (((uint16_t) -10) & 0x1FF));
+   EXPECT_EQ(0x7FFF, sim.getReg(4));
+   EXPECT_EQ(false, sim.getPcsrBit('n'));
+   EXPECT_EQ(false, sim.getPcsrBit('z'));
+   EXPECT_EQ(true, sim.getPcsrBit('p'));
+
+   sim.setPC(0x0001);
+   sim.doInst(LEA | (((uint16_t) 1) & 0x1FF));
+   EXPECT_EQ(0x0003, sim.getReg(4));
+   EXPECT_EQ(false, sim.getPcsrBit('n'));
+   EXPECT_EQ(false, sim.getPcsrBit('z'));
+   EXPECT_EQ(true, sim.getPcsrBit('p'));
 }
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
