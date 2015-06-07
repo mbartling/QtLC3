@@ -1,4 +1,5 @@
 #include "simulator.hpp"
+#include "simulator-internals.hpp"
 
 
 bool simulator::stepOnce( void ) {
@@ -6,7 +7,21 @@ bool simulator::stepOnce( void ) {
 }
 
 bool simulator::doInst( uint16_t inst ) {
-        return true;
+        switch (inst2opcode(inst)) {
+        case ADD:
+                if (inst2steering(inst)) {
+                        this->regs[inst2dr(inst)] =
+                                this->regs[inst2sr1(inst)]
+                                + inst2imm5(inst);
+                        return true;
+                } else {
+                        this->regs[inst2dr(inst)] =
+                                this->regs[inst2sr1(inst)]
+                                + this->regs[inst2sr2(inst)];
+                }
+        default:
+                return false;
+        }
 }
 
 bool simulator::getPcsrBit( char mnemonic ) {

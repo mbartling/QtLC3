@@ -58,13 +58,13 @@ TEST(CheckADD, Register) {
    sim.setReg(1, 2);
    sim.setReg(2, (uint16_t) -4);
 
-   sim.doInst(ADDR | SETDR(3) | SETSR1(0) | SETSR2(1)); //2 | 2 =4
+   sim.doInst(ADDR | SETDR(3) | SETSR1(0) | SETSR2(1)); //2 + 2 =4
    EXPECT_EQ(4, sim.getReg(3));
 
-   sim.doInst(ADDR | SETDR(4) | SETSR1(0) | SETSR2(2)); //2 | -4 = -2
-   EXPECT_EQ(-2, sim.getReg(4));
+   sim.doInst(ADDR | SETDR(4) | SETSR1(0) | SETSR2(2)); //2 + -4 = -2
+   EXPECT_EQ((uint16_t) -2, sim.getReg(4));
 
-   sim.doInst(ADDR | SETDR(3) | SETSR1(3) | SETSR2(2)); //4 | -4 = 0
+   sim.doInst(ADDR | SETDR(3) | SETSR1(3) | SETSR2(2)); //4 + -4 = 0
    EXPECT_EQ(0, sim.getReg(3));
 
 }
@@ -72,13 +72,13 @@ TEST(CheckADD, Register) {
 TEST(CheckADD, Immediate) {
    sim.setReg(0, 2);
 
-   sim.doInst(ADDI | SETDR(3) | SETSR1(0) | 2); //2 | 2 =4
+   sim.doInst(ADDI | SETDR(3) | SETSR1(0) | 2);  //2 + 2 =4
    EXPECT_EQ(4, sim.getReg(3));
 
-   sim.doInst(ADDI | SETDR(4) | SETSR1(0) | -4); //2 | -4 = -2
-   EXPECT_EQ(-2, sim.getReg(4));
+   sim.doInst(ADDI | SETDR(4) | SETSR1(0) | (((uint16_t)-4) & 0x1F)); //2 + -4 = -2
+   EXPECT_EQ((uint16_t)-2, sim.getReg(4));
 
-   sim.doInst(ADDI | SETDR(3) | SETSR1(3) | -4); //4 | -4 = 0
+   sim.doInst(ADDI | SETDR(3) | SETSR1(3) | (((uint16_t)-4) & 0x1F)); //4 + -4 = 0
    EXPECT_EQ(0, sim.getReg(3));
 
 }
