@@ -76,6 +76,16 @@ bool simulator::doInst( uint16_t inst ) {
                     || (this->P && inst2p(inst)))
                         this->PC += inst2imm9(inst);
                 break;
+
+        case JSR:
+                this->regs[7] = this->PC;
+        case JMP:
+                if (inst2n(inst))
+                        this->PC += inst2imm11(inst);
+                else
+                        this->PC = this->regs[inst2sr1(inst)];
+                break;
+
         default:
                 return false;
         }
@@ -88,6 +98,8 @@ bool simulator::doInst( uint16_t inst ) {
                 this->regs[inst2dr(inst)] = result;
                 this->setNZP(result);
                 break;
+        case JSR:
+        case JMP:
         case BR:
                 break;
         default:

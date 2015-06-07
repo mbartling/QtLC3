@@ -71,3 +71,11 @@ static inline uint16_t inst2imm9( uint16_t inst ) {
         }
 }
 
+static inline uint16_t inst2imm11( uint16_t inst ) {
+        if ((inst & (1 << 10)) >> 10) {
+                return inst | (0x1F << 11);
+        } else {
+                return inst & 0x7FF;
+        }
+}
+
