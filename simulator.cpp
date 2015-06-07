@@ -1,27 +1,52 @@
 #include "simulator.hpp"
 #include "simulator-internals.hpp"
+#include "stdio.h"
 
 
 bool simulator::stepOnce( void ) {
         return true;
 }
 
+void simulator::setNZP( uint16_t result ) {
+        int16_t signedResult = (int16_t) result;
+        this->N = false;
+        this->Z = false;
+        this->P = false;
+        if (signedResult < 0) this->N = true;
+        else if (signedResult == 0) this-> Z = true;
+        else if (signedResult > 0) this->P = true;
+}
+
 bool simulator::doInst( uint16_t inst ) {
+        uint16_t result = 0;
         switch (inst2opcode(inst)) {
         case ADD:
                 if (inst2steering(inst)) {
-                        this->regs[inst2dr(inst)] =
-                                this->regs[inst2sr1(inst)]
+                        result = this->regs[inst2sr1(inst)]
                                 + inst2imm5(inst);
-                        return true;
                 } else {
-                        this->regs[inst2dr(inst)] =
-                                this->regs[inst2sr1(inst)]
+                        result = this->regs[inst2sr1(inst)]
                                 + this->regs[inst2sr2(inst)];
                 }
+                break;
+        case AND:
+                if (inst2steering(inst)) {
+                        result = this->regs[inst2sr1(inst)]
+                                & inst2imm5(inst);
+                } else {
+                        result = this->regs[inst2sr1(inst)]
+                                & this->regs[inst2sr2(inst)];
+                }
+                break;
+        case NOT:
+                result = ~this->regs[inst2sr1(inst)];
+                break;
         default:
                 return false;
         }
+        this->regs[inst2dr(inst)] = result;
+        this->setNZP(result);
+        return true;
 }
 
 bool simulator::getPcsrBit( char mnemonic ) {

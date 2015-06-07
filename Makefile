@@ -1,3 +1,6 @@
+# Limitations: You must run make clean between invocations of
+#   make test and make python
+#------------------------
 GTEST_DIR := ~/gtest
 GTEST_INC := $(GTEST_DIR)/include
 

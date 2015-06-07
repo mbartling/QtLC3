@@ -72,7 +72,7 @@ TEST(CheckADD, Register) {
 TEST(CheckADD, Immediate) {
    sim.setReg(0, 2);
 
-   sim.doInst(ADDI | SETDR(3) | SETSR1(0) | 2);  //2 + 2 =4
+   sim.doInst(ADDI | SETDR(3) | SETSR1(0) | (2 & 0x1F));  //2 + 2 =4
    EXPECT_EQ(4, sim.getReg(3));
 
    sim.doInst(ADDI | SETDR(4) | SETSR1(0) | (((uint16_t)-4) & 0x1F)); //2 + -4 = -2
@@ -123,16 +123,16 @@ TEST(CheckNOT, All) {
    sim.setReg(3, 0x0000);
 
    sim.doInst(NOT | SETDR(4) | SETSR1(0)); 
-   EXPECT_EQ(~0x1010, sim.getReg(4));
+   EXPECT_EQ((uint16_t)~0x1010, sim.getReg(4));
 
    sim.doInst(NOT | SETDR(4) | SETSR1(1)); 
    EXPECT_EQ(0, sim.getReg(4));
 
    sim.doInst(NOT | SETDR(4) | SETSR1(2)); 
-   EXPECT_EQ(~0x1000, sim.getReg(4));
+   EXPECT_EQ((uint16_t)~0x1000, sim.getReg(4));
 
    sim.doInst(NOT | SETDR(4) | SETSR1(3)); 
-   EXPECT_EQ(0xFFFF, sim.getReg(4));
+   EXPECT_EQ((uint16_t)0xFFFF, sim.getReg(4));
 
 }
 int main(int argc, char** argv) {
