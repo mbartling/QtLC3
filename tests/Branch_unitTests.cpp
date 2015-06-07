@@ -51,23 +51,23 @@ TEST(CheckBR, AllPositive) {
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.setPcsrBit('p', true);
-   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('n', true);
    sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', false);
    sim1.doInst(BR | SETN(1) | SETZ(0) | SETP(0) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
+   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('z', true);
    sim1.setPcsrBit('p', false);
-   sim1.setPcsrBit('n', true);
-   sim1.setPcsrBit('z', false);
    sim1.doInst(BR | SETN(0) | SETZ(1) | SETP(0) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.setPcsrBit('p', false);
    sim1.setPcsrBit('n', false);
-   sim1.setPcsrBit('z', true);
+   sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', true);
    sim1.doInst(BR | SETN(0) | SETZ(0) | SETP(1) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 }

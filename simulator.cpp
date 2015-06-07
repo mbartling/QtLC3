@@ -70,6 +70,12 @@ bool simulator::doInst( uint16_t inst ) {
                 result = this->PC + inst2imm9(inst);
                 break;
 
+        case BR:
+                if ((this->N && inst2n(inst))
+                    || (this->Z && inst2z(inst))
+                    || (this->P && inst2p(inst)))
+                        this->PC += inst2imm9(inst);
+                break;
         default:
                 return false;
         }
@@ -81,6 +87,8 @@ bool simulator::doInst( uint16_t inst ) {
         case LEA:
                 this->regs[inst2dr(inst)] = result;
                 this->setNZP(result);
+                break;
+        case BR:
                 break;
         default:
                 return false;
