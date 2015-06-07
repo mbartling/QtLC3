@@ -64,6 +64,6 @@ vector<uint16_t> simulator::sliceMem( uint16_t start, uint16_t stop ){
                                 this->memory.begin() + stop );
 }
 
-uint16_t simulator::sliceMem( uint16_t addr ) {
-        return this->memory[addr];
-}
+// uint16_t simulator::sliceMem( uint16_t addr ) {
+        // return this->memory[addr];
+// }
