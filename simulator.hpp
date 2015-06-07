@@ -13,10 +13,12 @@ using std::vector;
 
 class simulator{
 public:
+        // vector<uint16_t> (simulator::*sliceMem1)( uint16_t , uint16_t ) = &simulator::sliceMem;
+        // uint16_t (simulator::*sliceMem2)( uint16_t ) = &simulator::sliceMem;
         bool stepOnce( void );
         bool doInst( uint16_t );
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
-        uint16_t sliceMem ( uint16_t addr );
+        // uint16_t sliceMem ( uint16_t addr );
         uint16_t getReg ( int number );
         bool setReg ( int number , uint16_t newVal);
         bool getPcsrBit ( char mnemonic );
@@ -27,4 +29,5 @@ private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         uint16_t N, Z, P;
         uint16_t PC;
+        
 };
