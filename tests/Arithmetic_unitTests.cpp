@@ -9,7 +9,7 @@
 #include <future>
 #include <iostream>
 #include <stdexcept>
-
+#include <stdint.h>
 #include "simulator.hpp"
 #include "gtest/gtest.h"
 
@@ -18,14 +18,14 @@ using std::endl;
 using std::string;
 using std::complex;
 
-#define SETDR(x) (((x & 0x7) << 9)
-#define SETSR1(x) (((x & 0x7) << 6)
-#define SETBASER(x) (((x & 0x7) << 6)
-#define SETSR2(x) (((x & 0x7) << 0)
+#define SETDR(x) (((x) & 0x7) << 9)
+#define SETSR1(x) (((x) & 0x7) << 6)
+#define SETBASER(x) (((x) & 0x7) << 6)
+#define SETSR2(x) (((x) & 0x7) << 0)
 
-#define SETN(x) (((x & 0x1) << 11)
-#define SETZ(x) (((x & 0x1) << 10)
-#define SETP(x) (((x & 0x1) << 9)
+#define SETN(x) ((((x) & 0x1) << 11)
+#define SETZ(x) ((((x) & 0x1) << 10)
+#define SETP(x) ((((x) & 0x1) << 9)
 #define STEERINGNORM 1<<5
 
 #define ADDR 0x1000
@@ -58,13 +58,13 @@ TEST(CheckADD, Register) {
    sim.setReg(1, 2);
    sim.setReg(2, (uint16_t) -4);
 
-   doInst(ADDR + SETDR(3) + SETSR1(0) + SETSR2(1)); //2 + 2 =4
+   sim.doInst(ADDR | SETDR(3) | SETSR1(0) | SETSR2(1)); //2 | 2 =4
    EXPECT_EQ(4, sim.getReg(3));
 
-   doInst(ADDR + SETDR(4) + SETSR1(0) + SETSR2(2)); //2 + -4 = -2
+   sim.doInst(ADDR | SETDR(4) | SETSR1(0) | SETSR2(2)); //2 | -4 = -2
    EXPECT_EQ(-2, sim.getReg(4));
 
-   doInst(ADDR + SETDR(3) + SETSR1(3) + SETSR2(2)); //4 + -4 = 0
+   sim.doInst(ADDR | SETDR(3) | SETSR1(3) | SETSR2(2)); //4 | -4 = 0
    EXPECT_EQ(0, sim.getReg(3));
 
 }
@@ -72,13 +72,13 @@ TEST(CheckADD, Register) {
 TEST(CheckADD, Immediate) {
    sim.setReg(0, 2);
 
-   doInst(ADDI + SETDR(3) + SETSR1(0) + 2); //2 + 2 =4
+   sim.doInst(ADDI | SETDR(3) | SETSR1(0) | 2); //2 | 2 =4
    EXPECT_EQ(4, sim.getReg(3));
 
-   doInst(ADDI + SETDR(4) + SETSR1(0) + -4); //2 + -4 = -2
+   sim.doInst(ADDI | SETDR(4) | SETSR1(0) | -4); //2 | -4 = -2
    EXPECT_EQ(-2, sim.getReg(4));
 
-   doInst(ADDI + SETDR(3) + SETSR1(3) + -4); //4 + -4 = 0
+   sim.doInst(ADDI | SETDR(3) | SETSR1(3) | -4); //4 | -4 = 0
    EXPECT_EQ(0, sim.getReg(3));
 
 }
@@ -89,13 +89,13 @@ TEST(CheckAND, Register) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   doInst(ANDR + SETDR(3) + SETSR1(0) + SETSR2(3)); 
+   sim.doInst(ANDR | SETDR(3) | SETSR1(0) | SETSR2(3)); 
    EXPECT_EQ(0, sim.getReg(3));
 
-   doInst(ANDR + SETDR(4) + SETSR1(0) + SETSR2(1)); 
+   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(1)); 
    EXPECT_EQ(0x1010, sim.getReg(4));
 
-   doInst(ANDR + SETDR(4) + SETSR1(0) + SETSR2(2)); 
+   sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(2)); 
    EXPECT_EQ(0x1000, sim.getReg(4));
 
 }
@@ -106,13 +106,13 @@ TEST(CheckAND, Immediate) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   doInst(ANDI + SETDR(3) + SETSR1(0) + 0x0000); 
+   sim.doInst(ANDI | SETDR(3) | SETSR1(0) | 0x0000); 
    EXPECT_EQ(0, sim.getReg(3));
 
-   doInst(ANDI + SETDR(4) + SETSR1(0) + 0x1F); 
+   sim.doInst(ANDI | SETDR(4) | SETSR1(0) | 0x1F); 
    EXPECT_EQ(0x1010, sim.getReg(4));
 
-   doInst(ANDI + SETDR(4) + SETSR1(1) + 0x10; 
+   sim.doInst(ANDI | SETDR(4) | SETSR1(1) | 0x10); 
    EXPECT_EQ(0xFFF0, sim.getReg(4));
 
 }
@@ -122,16 +122,16 @@ TEST(CheckNOT, All) {
    sim.setReg(2, 0x1000);
    sim.setReg(3, 0x0000);
 
-   doInst(NOT + SETDR(4) + SETSR1(0)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(0)); 
    EXPECT_EQ(~0x1010, sim.getReg(4));
 
-   doInst(NOT + SETDR(4) + SETSR1(1)); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(1)); 
    EXPECT_EQ(0, sim.getReg(4));
 
-   doInst(NOT + SETDR(4) + SETSR1(2); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(2)); 
    EXPECT_EQ(~0x1000, sim.getReg(4));
 
-   doInst(NOT + SETDR(4) + SETSR1(3); 
+   sim.doInst(NOT | SETDR(4) | SETSR1(3)); 
    EXPECT_EQ(0xFFFF, sim.getReg(4));
 
 }
