@@ -10,6 +10,7 @@ PY_INC := /usr/include/python2.7/
 
 SRC_DIRS += .
 SRC_DIRS += tests
+SRC_DIRS += pythonInterface
 
 CXX := g++
 CXXFLAGS += -g
@@ -36,10 +37,10 @@ test: $(TEST)
 
 python: $(PYLC3)
 
-$(PYLC3): $(OBJS)
+$(PYLC3): $(filter-out tests/%, ${OBJS})
 	$(CXX) $^ $(PYDEFS) $(CXXFLAGS) -fPIC -o $@
 
-$(TEST): $(OBJS)
+$(TEST): $(filter-out pythonInterface/%, ${OBJS})
 	$(CXX) $^ $(EXTRA_TESTS) $(GTEST_LIB) $(DEFS) $(CXXFLAGS) -pthread -o $@
 
 -include $(DEPS)
