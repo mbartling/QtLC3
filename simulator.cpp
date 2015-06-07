@@ -197,3 +197,4 @@ bool simulator::setPC(uint16_t pc){
         this->PC = pc;
         return true;
 }
+

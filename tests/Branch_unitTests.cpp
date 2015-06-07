@@ -295,4 +295,9 @@ TEST(CheckJSRR, All) {
    EXPECT_EQ(sim1.getReg(5), sim1.getPC());
    EXPECT_EQ(sim1.getReg(7), currPC);
 
+   //Check if return works
+   sim1.doInst(RET);
+   EXPECT_EQ(sim1.getPC(), sim1.getReg(7));
+   EXPECT_EQ(sim1.getPC(), currPC);
+
 }

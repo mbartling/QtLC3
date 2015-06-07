@@ -19,6 +19,9 @@ using std::vector;
  */
 class simulator{
 public:
+        using MEM_type = vector<uint16_t>;
+        vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
+        
         bool stepOnce( void );
         bool doInst( uint16_t );
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
@@ -26,11 +29,10 @@ public:
         bool setReg ( int number , uint16_t newVal);
         bool getPcsrBit ( char mnemonic );
         bool setPcsrBit ( char mnemonic , bool newVal);
-        uint16_t getPC(void);
+        uint16_t getPC(void);        
         bool setPC(uint16_t);
 
 private:
-        vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         uint16_t N, Z, P;
         uint16_t PC;
