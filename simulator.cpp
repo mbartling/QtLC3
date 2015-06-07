@@ -9,8 +9,36 @@
  * @param d [description]
  * @return [description]
  */
-bool simulator::stepOnce( void ) {
-        return true;
+bool simulator::stepN( int cycles ) {
+        int cyclesElapsed = 0;
+        bool exceptionP = true;
+        do {
+                exceptionP = this->doInst(this->readMem(this->PC));
+                cyclesElapsed++;
+        }while (exceptionP && ((cycles < 0) || (cyclesElapsed < cycles)));
+        return exceptionP;
+}
+
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param d [description]
+ * @return [description]
+ */
+uint16_t simulator::readMem( uint16_t addr ) {
+        return this->memory[addr];
+}
+
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param d [description]
+ * @return [description]
+ */
+void simulator::writeMem( uint16_t addr, uint16_t newVal ) {
+        this->memory[addr] = newVal;
 }
 
 /**
@@ -101,12 +129,13 @@ bool simulator::doInst( uint16_t inst ) {
 
         case RTI:
                 if (this->S) return false;
-                PC = this->memory[this->regs[6]];
+                PC = this->memRead(this->regs[6]);
                 this->regs[6]++;
-                this->S = (this->memory[this->regs[6]] & (1 << 15)) != 0;
-                this->N = (this->memory[this->regs[6]] & (1 << 2))  != 0;
-                this->Z = (this->memory[this->regs[6]] & (1 << 1))  != 0;
-                this->P = (this->memory[this->regs[6]] & (1 << 0))  != 0;
+                result = this->memRead(this->regs[6]);
+                this->S = (result & (1 << 15)) != 0;
+                this->N = (result & (1 << 2))  != 0;
+                this->Z = (result & (1 << 1))  != 0;
+                this->P = (result & (1 << 0))  != 0;
                 this->regs[6]++;
                 break;
 
@@ -116,10 +145,10 @@ bool simulator::doInst( uint16_t inst ) {
 
         switch (inst2opcode(inst)){
         case LDI:
-                result = this->memory[result];
+                result = this->memRead(result);
         case LD:
         case LDR:
-                result = this->memory[result];
+                result = this->memRead(result);
         case ADD:
         case AND:
         case NOT:
@@ -134,10 +163,10 @@ bool simulator::doInst( uint16_t inst ) {
         case RTI:
                 break;
         case STI:
-                result = this->memory[result];
+                result = this->memRead(result);
         case ST:
         case STR:
-                this->memory[result] = this->regs[inst2dr(inst)];
+                this->memWrite(result,this->regs[inst2dr(inst)]);
                 break;
         default:
                 return false;
