@@ -37,8 +37,9 @@ test: $(TEST)
 
 python: $(PYLC3)
 
+$(PYLC3): CXXFLAGS += -fPIC -shared
 $(PYLC3): $(filter-out tests/%, ${OBJS})
-	$(CXX) $^ $(PYDEFS) $(CXXFLAGS) -shared -fPIC -lboost_python -lboost_system -lpython2.7 -o $@
+	$(CXX) $^ $(PYDEFS) $(CXXFLAGS) -lboost_python -lboost_system -lpython2.7 -o $@
 
 $(TEST): $(filter-out pythonInterface/%, ${OBJS})
 	$(CXX) $^ $(EXTRA_TESTS) $(GTEST_LIB) $(DEFS) $(CXXFLAGS) -pthread -o $@
