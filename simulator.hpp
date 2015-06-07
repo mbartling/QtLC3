@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
+#include <Python.h>
 
 constexpr int ADDRESS_SPACE = 1<<16;
 constexpr int NUM_REGS = 8;
@@ -11,6 +12,16 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+struct WatchPoint;
+class simulator;
+
+struct WatchPoint {
+        uint16_t address;
+        uint16_t prevVal;
+        uint16_t currVal;
+        PyObject *cb;
+
+};
 /**
  * @brief Basic LC3 Simulator Class
  * @details This class is exposed to the Python Interface,
@@ -32,8 +43,10 @@ public:
         uint16_t getPC(void);        
         bool setPC(uint16_t);
 
+        bool addWatchPoint(uint16_t addr, PyObject* cb);
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
+        vector<WatchPoint> watchPoints;
         uint16_t N, Z, P;
         uint16_t PC;
         void setNZP( uint16_t );

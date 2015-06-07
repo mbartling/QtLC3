@@ -238,3 +238,15 @@ bool simulator::setPC(uint16_t pc){
         return true;
 }
 
+
+bool simulator::addWatchPoint(uint16_t addr, PyObject* cb){
+        if(addr >= 1 << 16) return false;
+        WatchPoint wp;
+        wp.cb = cb;
+        wp.address = addr;
+        wp.prevVal = memory[addr];
+        wp.currVal = memory[addr];
+        watchPoints.push_back(wp);
+        return true;
+}
+

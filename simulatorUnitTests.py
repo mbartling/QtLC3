@@ -90,7 +90,23 @@ class TestAnd(unittest.TestCase):
     self.assertEqual(false, self.sim.getPcsrBit('z'))
     self.assertEqual(true, self.sim.getPcsrBit('p'))    
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
   #If Prints OK then ALL TESTS PASSED
   # YAY 
-  unittest.main()
+  # unittest.main()
+
+def doTest(testCase):
+  print "-------------------------------------"
+
+  suite = unittest.TestLoader().loadTestsFromTestCase(testCase)
+  res = unittest.TextTestRunner(verbosity=2).run(suite)
+  
+  print "List of Test Errors", res.errors
+  print "List of Test Failures", res.failures
+  print "List of Test Unexpected Successes", res.unexpectedSuccesses
+  print "Num Tests Run:", res.testsRun
+  print "Was Successful ?:", res.wasSuccessful() 
+  print "-------------------------------------"
+
+doTest(TestAdd)
+doTest(TestAnd)
