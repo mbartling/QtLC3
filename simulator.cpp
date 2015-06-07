@@ -65,9 +65,17 @@ bool simulator::doInst( uint16_t inst ) {
         case NOT:
                 result = ~this->regs[inst2sr1(inst)];
                 break;
-
+        case LD:
+        case LDI:
+        case ST:
+        case STI:
         case LEA:
                 result = this->PC + inst2imm9(inst);
+                break;
+
+        case LDR:
+        case STR:
+                result = this->regs[inst2sr1(inst)] + inst2imm6(inst);
                 break;
 
         case BR:
@@ -86,11 +94,17 @@ bool simulator::doInst( uint16_t inst ) {
                         this->PC = this->regs[inst2sr1(inst)];
                 break;
 
+
         default:
                 return false;
         }
 
         switch (inst2opcode(inst)){
+        case LDI:
+                result = this->memory[result];
+        case LD:
+        case LDR:
+                result = this->memory[result];
         case ADD:
         case AND:
         case NOT:
@@ -101,6 +115,12 @@ bool simulator::doInst( uint16_t inst ) {
         case JSR:
         case JMP:
         case BR:
+                break;
+        case STI:
+                result = this->memory[result];
+        case ST:
+        case STR:
+                this->memory[result] = this->regs[inst2dr(inst)];
                 break;
         default:
                 return false;

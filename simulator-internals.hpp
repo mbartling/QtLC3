@@ -63,6 +63,14 @@ static inline uint16_t inst2imm5( uint16_t inst ) {
         }
 }
 
+static inline uint16_t inst2imm6( uint16_t inst ) {
+        if ((inst & (1 << 5)) >> 5) {
+                return inst | (0x3FF << 6);
+        } else {
+                return inst & 0x3F;
+        }
+}
+
 static inline uint16_t inst2imm9( uint16_t inst ) {
         if ((inst & (1 << 8)) >> 8) {
                 return inst | (0x7F << 9);
