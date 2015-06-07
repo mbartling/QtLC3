@@ -104,6 +104,9 @@ vector<uint16_t> simulator::sliceMem( uint16_t start, uint16_t stop ){
                                 this->memory.begin() + stop );
 }
 
-// uint16_t simulator::sliceMem( uint16_t addr ) {
-        // return this->memory[addr];
-// }
+uint16_t simulator::getPC(void){ return PC; }
+bool simulator::setPC(uint16_t pc){
+        if(pc >= ADDRESS_SPACE) return false;
+        this->PC = pc;
+        return true;
+}
