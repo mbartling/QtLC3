@@ -51,23 +51,23 @@ TEST(CheckBR, AllPositive) {
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.setPcsrBit('p', true);
-   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('n', true);
    sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', false);
    sim1.doInst(BR | SETN(1) | SETZ(0) | SETP(0) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
+   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('z', true);
    sim1.setPcsrBit('p', false);
-   sim1.setPcsrBit('n', true);
-   sim1.setPcsrBit('z', false);
    sim1.doInst(BR | SETN(0) | SETZ(1) | SETP(0) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.setPcsrBit('p', false);
    sim1.setPcsrBit('n', false);
-   sim1.setPcsrBit('z', true);
+   sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', true);
    sim1.doInst(BR | SETN(0) | SETZ(0) | SETP(1) | 0x1);
    EXPECT_EQ(0x3004, sim1.getPC());
 }
@@ -77,7 +77,7 @@ TEST(CheckBR, AllNegative) {
    sim1.setReg(1, 0xFFFF);
    sim1.setReg(2, 0x1000);
    sim1.setReg(3, 0x0000);
-   uint16_t bTarget = (uint16_t) -4;
+   uint16_t bTarget = (uint16_t) (-4) & 0x1FF;
    //Simple NOP test
    sim1.setPC(0x3002);
    sim1.doInst(BR | bTarget);
@@ -112,23 +112,23 @@ TEST(CheckBR, AllNegative) {
    EXPECT_EQ(0x3000, sim1.getPC());
 
    sim1.setPC(0x3003);
-   sim1.setPcsrBit('p', true);
-   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('n', true);
    sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', false);
    sim1.doInst(BR | SETN(1) | SETZ(0) | SETP(0) | bTarget);
    EXPECT_EQ(0x3000, sim1.getPC());
 
    sim1.setPC(0x3003);
+   sim1.setPcsrBit('n', false);
+   sim1.setPcsrBit('z', true);
    sim1.setPcsrBit('p', false);
-   sim1.setPcsrBit('n', true);
-   sim1.setPcsrBit('z', false);
    sim1.doInst(BR | SETN(0) | SETZ(1) | SETP(0) | bTarget);
    EXPECT_EQ(0x3000, sim1.getPC());
 
    sim1.setPC(0x3003);
-   sim1.setPcsrBit('p', false);
    sim1.setPcsrBit('n', false);
-   sim1.setPcsrBit('z', true);
+   sim1.setPcsrBit('z', false);
+   sim1.setPcsrBit('p', true);
    sim1.doInst(BR | SETN(0) | SETZ(0) | SETP(1) | bTarget);
    EXPECT_EQ(0x3000, sim1.getPC());
 
@@ -165,7 +165,7 @@ TEST(CheckBR, AllPositiveInstructions) {
    EXPECT_EQ(0x3005, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | ((uint16_t) -1) );  
+   sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | (((uint16_t) -1) & 0x1F));  
    sim1.doInst(BR | SETN(1) | SETZ(1) | SETP(1) | 0x1);
    EXPECT_EQ(0x3005, sim1.getPC());
 
@@ -177,17 +177,17 @@ TEST(CheckBR, AllPositiveInstructions) {
 // ----------------------------------------
    sim1.setPC(0x3002);
    sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | 1 );  
+   sim1.doInst(BR | SETN(0) | SETZ(0) | SETP(1) | 0x1);
+   EXPECT_EQ(0x3005, sim1.getPC());
+
+   sim1.setPC(0x3002);
+   sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | (((uint16_t) -1) & 0x1F));  
    sim1.doInst(BR | SETN(1) | SETZ(0) | SETP(0) | 0x1);
    EXPECT_EQ(0x3005, sim1.getPC());
 
    sim1.setPC(0x3002);
-   sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | ((uint16_t) -1) );  
-   sim1.doInst(BR | SETN(0) | SETZ(1) | SETP(0) | 0x1);
-   EXPECT_EQ(0x3005, sim1.getPC());
-
-   sim1.setPC(0x3002);
    sim1.doInst(ADDI | SETDR(4) | SETSR1(3) | 0 );  
-   sim1.doInst(BR | SETN(0) | SETZ(0) | SETP(1) | 0x1);
+   sim1.doInst(BR | SETN(0) | SETZ(1) | SETP(0) | 0x1);
    EXPECT_EQ(0x3005, sim1.getPC());
 }
 
@@ -233,11 +233,11 @@ TEST(CheckJSR, All) {
    sim1.doInst(JSR | offSet9);
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
- 
+
    sim1.setPC(0x3002);
    currPC = sim1.getPC() + 1;
-   offSet9 = (uint16_t) -1000;
-   sim1.doInst(JSR | offSet9);
+   offSet9 = ((uint16_t) -1000);
+   sim1.doInst(JSR | (offSet9 & 0x7FF));
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
 
@@ -250,8 +250,8 @@ TEST(CheckJSR, All) {
 
    sim1.setPC(0x3002);
    currPC = sim1.getPC() + 1;
-   offSet9 = (uint16_t) 1 << 10;
-   sim1.doInst(JSR | offSet9);
+   offSet9 = (uint16_t) -1024;
+   sim1.doInst(JSR | (offSet9 &0x7FF));
    EXPECT_EQ(sim1.getReg(7), currPC);
    EXPECT_EQ(sim1.getPC(), (uint16_t)(currPC + offSet9));
 }
