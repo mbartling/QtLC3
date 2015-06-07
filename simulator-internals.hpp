@@ -87,3 +87,7 @@ static inline uint16_t inst2imm11( uint16_t inst ) {
         }
 }
 
+static inline uint16_t inst2trapvec8( uint16_t inst ) {
+        return inst & 0xFF;
+}
+
