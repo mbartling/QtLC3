@@ -156,22 +156,22 @@ TEST(CheckNOT, All) {
 
 TEST(CheckLEA, Immediate) {
    sim.setPC(0x1010);
-   sim.doInst(LEA |  0x0000);
-   EXPECT_EQ(0x1011, sim.getPC());
+   sim.doInst(LEA | SETDR(1) | 0x0000);
+   EXPECT_EQ(0x1011, sim.getReg(1));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(true, sim.getPcsrBit('p'));
 
    sim.setPC(0x8008);
-   sim.doInst(LEA | (((uint16_t) -10) & 0x1FF));
-   EXPECT_EQ(0x7FFF, sim.getReg(4));
+   sim.doInst(LEA | SETDR(2) | (((uint16_t) -10) & 0x1FF));
+   EXPECT_EQ(0x7FFF, sim.getReg(2));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(true, sim.getPcsrBit('p'));
 
    sim.setPC(0x0001);
-   sim.doInst(LEA | (((uint16_t) 1) & 0x1FF));
-   EXPECT_EQ(0x0003, sim.getReg(4));
+   sim.doInst(LEA | SETDR(3) | (((uint16_t) 1) & 0x1FF));
+   EXPECT_EQ(0x0003, sim.getReg(3));
    EXPECT_EQ(false, sim.getPcsrBit('n'));
    EXPECT_EQ(false, sim.getPcsrBit('z'));
    EXPECT_EQ(true, sim.getPcsrBit('p'));
