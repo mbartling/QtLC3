@@ -5,9 +5,7 @@ GTEST_DIR := ~/gtest
 GTEST_INC := $(GTEST_DIR)/include
 
 #choose based on system
-GTEST_LIB := $(GTEST_DIR)/lib/gtest64.a          #class virtual machine uses this
-#GTEST_LIB = $(GTEST_DIR)/lib/gtest32.a
-#GTEST_LIB = $(GTEST_DIR)/lib/gtest_yosemite.a  #for Apple users
+GTEST_LIB := -lgtest
 
 PY_INC := /usr/include/python2.7/
 

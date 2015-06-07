@@ -66,13 +66,13 @@ bool simulator::getPcsrBit( char mnemonic ) {
         switch (mnemonic) {
         case 'n':
         case 'N':
-                return this->N;
+                return this->N == 1;
         case 'z':
         case 'Z':
-                return this->Z;
+                return this->Z == 1;
         case 'p':
         case 'P':
-                return this->P;
+                return this->P == 1;
         default:
                 return false;
 

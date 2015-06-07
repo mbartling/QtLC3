@@ -18,7 +18,7 @@ TEST(CheckBR, All) {
    sim1.setReg(2, 0x1000);
    sim1.setReg(3, 0x0000);
 
-   sim1.doInst()
+   sim1.doInst(BR);
    sim1.doInst(NOT | SETDR(4) | SETSR1(0)); 
    EXPECT_EQ((uint16_t)~0x1010, sim1.getReg(4));
 
