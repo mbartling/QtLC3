@@ -2,11 +2,23 @@
 #include "simulator-internals.hpp"
 #include "stdio.h"
 
-
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param d [description]
+ * @return [description]
+ */
 bool simulator::stepOnce( void ) {
         return true;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param result [description]
+ */
 void simulator::setNZP( uint16_t result ) {
         int16_t signedResult = (int16_t) result;
         this->N = false;
@@ -17,9 +29,18 @@ void simulator::setNZP( uint16_t result ) {
         else if (signedResult > 0) this->P = true;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param inst [description]
+ * @return [description]
+ */
 bool simulator::doInst( uint16_t inst ) {
         uint16_t result = 0;
-        this->PC++;
+        //LC3 PreIncrements the PC
+        this->PC = (this->PC + 1) % ADDRESS_SPACE;
+
         switch (inst2opcode(inst)) {
         case ADD:
                 if (inst2steering(inst)) {
@@ -30,6 +51,7 @@ bool simulator::doInst( uint16_t inst ) {
                                 + this->regs[inst2sr2(inst)];
                 }
                 break;
+
         case AND:
                 if (inst2steering(inst)) {
                         result = this->regs[inst2sr1(inst)]
@@ -39,15 +61,19 @@ bool simulator::doInst( uint16_t inst ) {
                                 & this->regs[inst2sr2(inst)];
                 }
                 break;
+
         case NOT:
                 result = ~this->regs[inst2sr1(inst)];
                 break;
+
         case LEA:
                 result = this->PC + inst2imm9(inst);
                 break;
+
         default:
                 return false;
         }
+
         switch (inst2opcode(inst)){
         case ADD:
         case AND:
@@ -62,6 +88,13 @@ bool simulator::doInst( uint16_t inst ) {
         return true;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param mnemonic [description]
+ * @return [description]
+ */
 bool simulator::getPcsrBit( char mnemonic ) {
         switch (mnemonic) {
         case 'n':
@@ -79,30 +112,57 @@ bool simulator::getPcsrBit( char mnemonic ) {
         }
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param mnemonic [description]
+ * @param newVal [description]
+ * 
+ * @return [description]
+ */
 bool simulator::setPcsrBit( char mnemonic , bool newVal) {
         switch (mnemonic) {
         case 'n':
         case 'N':
                 this->N = newVal;
-                return true;
+                break;
         case 'z':
         case 'Z':
                 this->Z = newVal;
-                return true;
+                break;
         case 'p':
         case 'P':
                 this->P = newVal;
-                return true;
+                break;
         default:
                 return false;
 
         }
+        return true;
+
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param number [description]
+ * @return [description]
+ */
 uint16_t simulator::getReg( int number ) {
         return (number > NUM_REGS) ? 0 : this->regs[number];
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param number [description]
+ * @param newVal [description]
+ * 
+ * @return [description]
+ */
 bool simulator::setReg( int number, uint16_t newVal ) {
         if (number > NUM_REGS) {
                 return false;
@@ -112,11 +172,25 @@ bool simulator::setReg( int number, uint16_t newVal ) {
         }
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param start [description]
+ * @param stop [description]
+ * 
+ * @return [description]
+ */
 vector<uint16_t> simulator::sliceMem( uint16_t start, uint16_t stop ){
         return vector<uint16_t>(this->memory.begin() + start,
                                 this->memory.begin() + stop );
 }
 
+/**
+ * @brief Set the Current PC
+ * @details Checks if the desired PC is Valid, then sets it
+ * @return boolean if valid or not
+ */
 uint16_t simulator::getPC(void){ return PC; }
 bool simulator::setPC(uint16_t pc){
         if(pc >= ADDRESS_SPACE) return false;

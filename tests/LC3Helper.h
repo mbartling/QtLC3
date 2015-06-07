@@ -4,9 +4,9 @@
 #define SETBASER(x) (((x) & 0x7) << 6)
 #define SETSR2(x) (((x) & 0x7) << 0)
 
-#define SETN(x) ((((x) & 0x1) << 11)
-#define SETZ(x) ((((x) & 0x1) << 10)
-#define SETP(x) ((((x) & 0x1) << 9)
+#define SETN(x) (((x) & 0x1) << 11)
+#define SETZ(x) (((x) & 0x1) << 10)
+#define SETP(x) (((x) & 0x1) << 9)
 #define STEERINGNORM 1<<5
 
 #define ADDR 0x1000

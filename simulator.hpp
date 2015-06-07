@@ -11,14 +11,17 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+/**
+ * @brief Basic LC3 Simulator Class
+ * @details This class is exposed to the Python Interface,
+ * CLI, and GUI
+ * 
+ */
 class simulator{
 public:
-        // vector<uint16_t> (simulator::*sliceMem1)( uint16_t , uint16_t ) = &simulator::sliceMem;
-        // uint16_t (simulator::*sliceMem2)( uint16_t ) = &simulator::sliceMem;
         bool stepOnce( void );
         bool doInst( uint16_t );
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
-        // uint16_t sliceMem ( uint16_t addr );
         uint16_t getReg ( int number );
         bool setReg ( int number , uint16_t newVal);
         bool getPcsrBit ( char mnemonic );
