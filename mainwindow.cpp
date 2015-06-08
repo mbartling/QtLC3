@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    helpSystem = new HelpSystem(this);
+    helpSystem->hide();
     for(int i = 0; i < 65536; ++i){
           QTableWidgetItem* mItem = new QTableWidgetItem;
           QTableWidgetItem* mItemD = new QTableWidgetItem;
@@ -119,4 +120,9 @@ QString GetTranslation(QString mInst){
 void MainWindow::on_actionConsole_triggered()
 {
 
+}
+
+void MainWindow::on_actionHelp_Me_triggered()
+{
+    helpSystem->show();
 }

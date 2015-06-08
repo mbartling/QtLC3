@@ -6,6 +6,8 @@
 #include <QListWidget>
 #include <QGroupBox>
 #include <QLabel>
+#include "helpsystem.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -38,8 +40,10 @@ private slots:
 
     void on_actionConsole_triggered();
 
+    void on_actionHelp_Me_triggered();
 private:
     Ui::MainWindow *ui;
+    HelpSystem *helpSystem;
 //    enum {numRegs = 8};
 //    QGroupBox *gridGroupBox;
 //    QLabel *regLabels[numRegs];

@@ -12,11 +12,16 @@ TARGET = LC3Sim
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    lc3sim.cpp
+#SOURCES += main.cpp\
+#        mainwindow.cpp \
+#    lc3sim.cpp
 
-HEADERS  += mainwindow.h \
-    lc3sim.h
+SOURCES += *.cpp
 
-FORMS    += mainwindow.ui
+#HEADERS  += mainwindow.h \
+#    lc3sim.h
+
+#FORMS    += mainwindow.ui
+
+HEADERS += *.h
+FORMS += *.ui
