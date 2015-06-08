@@ -386,3 +386,12 @@ bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb
 int simulator::getNumWatchPoints(){
         return this->watchPoints.size();
 }
+
+bool simulator::run(){
+    while(true){
+        if(this->PC == 0x25) break;
+        this->stepN(1);
+    }
+
+    return true;
+}

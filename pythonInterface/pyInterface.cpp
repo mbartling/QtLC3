@@ -23,6 +23,7 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("addWatchPoint", &simulator::addWatchPoint)
     .def("getNumWatchPoints", &simulator::getNumWatchPoints)
     .def("load", &simulator::loadBinFile)
+    .def("run", &simulator::run)
     .def("getPC", &simulator::getPC)
     .def("setPC", &simulator::setPC);
 }
