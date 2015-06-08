@@ -22,6 +22,7 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("setPcsrBit", &simulator::setPcsrBit)
     .def("addWatchPoint", &simulator::addWatchPoint)
     .def("getNumWatchPoints", &simulator::getNumWatchPoints)
+    .def("loadBinFile", &simulator::loadBinFile)
     .def("getPC", &simulator::getPC)
     .def("setPC", &simulator::setPC);
 }

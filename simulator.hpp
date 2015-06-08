@@ -46,6 +46,7 @@ public:
 
         bool addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb);
         int getNumWatchPoints();
+        bool loadBinFile(std::string);
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();

@@ -1,7 +1,7 @@
 #include "simulator.hpp"
 #include "simulator-internals.hpp"
-#include "stdio.h"
 #include <boost/python.hpp>
+#include <fstream>
 
 /**
  * @brief [brief description]
@@ -18,6 +18,32 @@ bool simulator::stepN( int cycles ) {
                 cyclesElapsed++;
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
         return exceptionP;
+}
+
+bool simulator::loadBinFile( std::string filename ) {
+        int fileSize = 0;
+        uint16_t startAddr = 0;
+        uint16_t data = 0;
+        std::ifstream in;
+        in.open(filename);
+        in.seekg(0, in.end);
+        fileSize = in.tellg();
+        in.seekg(0, in.beg);
+        if (fileSize < 2) return false;
+        in.read((char*)&startAddr, 2);
+        startAddr ^= ((startAddr & 0xFF) << 8);
+        startAddr ^= startAddr >> 8;
+        startAddr ^= ((startAddr & 0xFF) << 8);
+        if (startAddr + fileSize - 2 > (1<<16)) return false;
+        while (! in.eof()) {
+                in.read((char*)&data,2);
+                data ^= ((data & 0xFF) << 8);
+                data ^= data >> 8;
+                data ^= ((data & 0xFF) << 8);
+                this->memory[startAddr++] = data;
+        }
+        in.close();
+        return true;
 }
 
 void callCallback (struct WatchPoint toCall) {
