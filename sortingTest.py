@@ -26,6 +26,7 @@ def lowerHalf(x):
 
 class SortingTest(unittest.TestCase):
 
+  #The Setup class is provided by unittest and is run before each test
   def setUp(self):
     self.sim = pylc3.simulator()
     self.sim.load("sortscores.obj")
