@@ -72,23 +72,72 @@ class TestAnd(unittest.TestCase):
   def test_AND1(self):
     self.sim.doInst(ANDR | SETDR(3) | SETSR1(0) | SETSR2(3))
     self.assertEqual(0, self.sim.getReg(3))
-    self.assertEqual(false, self.sim.getPcsrBit('n'))
-    self.assertEqual(true, self.sim.getPcsrBit('z'))
-    self.assertEqual(false, self.sim.getPcsrBit('p'))
+    self.assertEqual(False, self.sim.getPcsrBit('n'))
+    self.assertEqual(True, self.sim.getPcsrBit('z'))
+    self.assertEqual(False, self.sim.getPcsrBit('p'))
 
   def test_AND1(self):  
     self.sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(1))
     self.assertEqual(0x1010, self.sim.getReg(4))
-    self.assertEqual(false, self.sim.getPcsrBit('n'))
-    self.assertEqual(false, self.sim.getPcsrBit('z'))
-    self.assertEqual(true, self.sim.getPcsrBit('p'))
+    self.assertEqual(False, self.sim.getPcsrBit('n'))
+    self.assertEqual(False, self.sim.getPcsrBit('z'))
+    self.assertEqual(True, self.sim.getPcsrBit('p'))
 
   def test_AND1(self):
     self.sim.doInst(ANDR | SETDR(4) | SETSR1(0) | SETSR2(2))
     self.assertEqual(0x1000, self.sim.getReg(4))
-    self.assertEqual(false, self.sim.getPcsrBit('n'))
-    self.assertEqual(false, self.sim.getPcsrBit('z'))
-    self.assertEqual(true, self.sim.getPcsrBit('p'))    
+    self.assertEqual(False, self.sim.getPcsrBit('n'))
+    self.assertEqual(False, self.sim.getPcsrBit('z'))
+    self.assertEqual(True, self.sim.getPcsrBit('p'))    
+
+class TestWatchPoint(unittest.TestCase):
+  def setUp(self):
+    self.sim = pylc3.simulator()
+
+  def test_WatchRead(self):
+    self.called = False
+    def watch (a,p,c):
+      self.called = True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addWatchPoint(0x3000, True, False, watch)
+    self.assertEqual(1, self.sim.getNumWatchPoints())
+    self.sim.stepN(5)
+    self.assertEqual(True, self.called)
+
+  def test_WatchWrite(self):
+    self.called = False
+    def watch (a,p,c):
+      self.called = True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = ST | SETDR(1) | neg(-2) & 0x1FF
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addWatchPoint(0x3000, False, True, watch)
+    self.assertEqual(1, self.sim.getNumWatchPoints())
+    self.sim.stepN(5)
+    self.assertEqual(True, self.called)
+
+  def test_WatchReadWrite(self):
+    self.called = 0
+    def watch (a,p,c):
+      self.called += 1
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = ST | SETDR(1) | neg(-2) & 0x1FF
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addWatchPoint(0x3000, True, True, watch)
+    self.assertEqual(1, self.sim.getNumWatchPoints())
+    self.sim.stepN(5)
+    self.assertEqual(2, self.called)
 
 # if __name__ == '__main__':
   #If Prints OK then ALL TESTS PASSED
@@ -110,3 +159,4 @@ def doTest(testCase):
 
 doTest(TestAdd)
 doTest(TestAnd)
+doTest(TestWatchPoint)
