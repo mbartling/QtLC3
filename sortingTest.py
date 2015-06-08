@@ -15,6 +15,7 @@ import pylc3
 import unittest
 from LC3Helper import *
 import random
+import grader
 
 # Helper Functions
 def upperHalf(x):
@@ -27,8 +28,8 @@ class SortingTest(unittest.TestCase):
 
   def setUp(self):
     self.sim = pylc3.simulator()
-    self.sim.load("sort.obj")
-    print("Done Initializing Simulator")
+    self.sim.load("sortscores.obj")
+    # print("Done Initializing Simulator")
 
   def test_ProvidedInDocument(self):
     gradeList = [upperHalf(23) | lowerHalf(78), \
@@ -36,28 +37,38 @@ class SortingTest(unittest.TestCase):
                  upperHalf(56) | lowerHalf(5),  \
                  upperHalf(2) | lowerHalf(87)]
     
-    self.sim.mem[x3200:(x3200 + len(gradeList))] = gradeList
+    self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
     self.run()
 
-    progOutList = self.sim.mem[x3200:(x3200 + len(gradeList))]
+    progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
 
     #Python Sorts are guaranteed to be stable, so we can check if their output is correctly sorted
     # in just one line :) (We dont care whether the student implemented stable vs unstable sort)
-    self.assertEqual(sorted(progOutList, key = lambda grade : grade & 0xFF), progOutList)
+    # Note, mem returns a pylc3.mem object, so we need to cast it to a list to print
+    Expected = progOutList # Sorted Sorts the list in place
+    sorted(Expected, key = lambda grade : grade & 0xFF, reverse=True)
+    self.assertEqual(Expected, progOutList)
 
   # Generate A random Test
   def test_random_1(self):
     numStudents = 50
-    gradeList = []
+    gradeList = []  #Declare a list
     
+    #Create the Grade list
     for i in range(numStudents):
-      gradeList.append( upperHalf(i + 1), lowerHalf(random.randint(0,100)))
+      gradeList.append( upperHalf(i + 1) | lowerHalf(random.randint(0,100)))
 
-    self.sim.mem[x3200:(x3200 + len(gradeList))] = gradeList
+    #Populate the simulator memory and run
+    self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
     self.run()
 
-    progOutList = self.sim.mem[x3200:(x3200 + len(gradeList))]
+    progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
 
     #Python Sorts are guaranteed to be stable, so we can check if their output is correctly sorted
     # in just one line :) (We dont care whether the student implemented stable vs unstable sort)
-    self.assertEqual(sorted(progOutList, key = lambda grade : grade & 0xFF), progOutList)
+    Expected = progOutList  # Sorted Sorts the list in place
+    sorted(Expected, key = lambda grade : grade & 0xFF, reverse=True)
+    self.assertEqual(Expected, progOutList)
+
+
+grader.doTest(SortingTest)
