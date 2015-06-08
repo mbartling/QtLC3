@@ -4,11 +4,11 @@
 #include <fstream>
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief step forward N cycles
+ * @details  step forward N cycles
  * 
- * @param d [description]
- * @return [description]
+ * @param cycles number of cycles to step
+ * @return false if exception occurred
  */
 bool simulator::stepN( int cycles ) {
         int cyclesElapsed = 0;
@@ -20,6 +20,14 @@ bool simulator::stepN( int cycles ) {
         return exceptionP;
 }
 
+/**
+ * @brief Load a LC3 Object file
+ * @details LC3 object files are binary files where the
+ * first word denotes the starting address of the program
+ * 
+ * @param filename path to file
+ * @return successful?
+ */
 bool simulator::loadBinFile( std::string filename ) {
         int fileSize = 0;
         uint16_t startAddr = 0;
@@ -46,18 +54,26 @@ bool simulator::loadBinFile( std::string filename ) {
         return true;
 }
 
+/**
+ * @brief call watchpoint callbacks
+ * @details Watchpoints have python callbacks, e.g. a print function
+ * or some other process. Equivelent to onChanged(mem[Address]) do callback
+ * 
+ * @param WatchPoint Triggered watch point
+ */
 void callCallback (struct WatchPoint toCall) {
         boost::python::call<void>(toCall.cb
                                   , toCall.address
                                   , toCall.prevVal
                                   , toCall.currVal);
 }
+
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Read a memory location
+ * @details reads from memory. Triggers watch points if necessary
  * 
- * @param d [description]
- * @return [description]
+ * @param addr Address to read from
+ * @return the data at mem[addr]
  */
 uint16_t simulator::memRead( uint16_t addr ) {
         for (std::vector<WatchPoint>::iterator it = this->watchPoints.begin()
@@ -71,11 +87,12 @@ uint16_t simulator::memRead( uint16_t addr ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Write to a memory location
+ * @details writes to memory. Triggers watch points if necessary
  * 
- * @param d [description]
- * @return [description]
+ * @param addr Memory address to access
+ * @param newVal mem[addr] = newVal
+ * @return none
  */
 void simulator::memWrite( uint16_t addr, uint16_t newVal ) {
         this->memory[addr] = newVal;
@@ -91,10 +108,10 @@ void simulator::memWrite( uint16_t addr, uint16_t newVal ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Manually set the NZP bits of PSR
+ * @details Manually set the NZP bits of PSR
  * 
- * @param result [description]
+ * @param result None
  */
 void simulator::setNZP( uint16_t result ) {
         int16_t signedResult = (int16_t) result;
@@ -107,11 +124,11 @@ void simulator::setNZP( uint16_t result ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Process an instruction
+ * @details This is equivelent to decode execute
  * 
- * @param inst [description]
- * @return [description]
+ * @param inst 16 bit instruction to process
+ * @return exception occurred?
  */
 bool simulator::doInst( uint16_t inst ) {
         uint16_t result = 0;
@@ -224,11 +241,11 @@ bool simulator::doInst( uint16_t inst ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Get a status bit from the PSR
+ * @details request a status bit from the PSR using its character
  * 
- * @param mnemonic [description]
- * @return [description]
+ * @param mnemonic n, z, p, or s
+ * @return the status bit
  */
 bool simulator::getPcsrBit( char mnemonic ) {
         switch (mnemonic) {
@@ -251,13 +268,13 @@ bool simulator::getPcsrBit( char mnemonic ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Set status bit in PSR
+ * @details Set a specific status bit in the PSR
  * 
- * @param mnemonic [description]
- * @param newVal [description]
+ * @param mnemonic character of bit to set
+ * @param newVal true/false
  * 
- * @return [description]
+ * @return successful?
  */
 bool simulator::setPcsrBit( char mnemonic , bool newVal) {
         switch (mnemonic) {
@@ -282,24 +299,24 @@ bool simulator::setPcsrBit( char mnemonic , bool newVal) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Read from the register file
+ * @details Read from the register file
  * 
- * @param number [description]
- * @return [description]
+ * @param number Register Number
+ * @return register data
  */
 uint16_t simulator::getReg( int number ) {
         return (number > NUM_REGS) ? 0 : this->regs[number];
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Write to the register file
+ * @details Write to the register file
  * 
- * @param number [description]
- * @param newVal [description]
+ * @param number Register Number
+ * @param newVal reg <= newVal
  * 
- * @return [description]
+ * @return successful?
  */
 bool simulator::setReg( int number, uint16_t newVal ) {
         if (number > NUM_REGS) {
@@ -311,13 +328,13 @@ bool simulator::setReg( int number, uint16_t newVal ) {
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
+ * @brief Get a slice of memory
+ * @details get a slice of memory to work with
  * 
- * @param start [description]
- * @param stop [description]
+ * @param start starting address
+ * @param stop end address
  * 
- * @return [description]
+ * @return a copy of a slice of memory
  */
 vector<uint16_t> simulator::sliceMem( uint16_t start, uint16_t stop ){
         return vector<uint16_t>(this->memory.begin() + start,
@@ -336,7 +353,19 @@ bool simulator::setPC(uint16_t pc){
         return true;
 }
 
-
+/**
+ * @brief Add a watch point to the simulator
+ * @details Watch points can be triggered on any combination of read/write
+ * to a specific address. On triggering, the watchpoints call a python callback
+ * function to handle the event. These call backs could be as simple as a print statement.
+ * It also accepts python lambdas.
+ * 
+ * @param addr Address of memory to watch
+ * @param read trigger on mem read
+ * @param write trigger on mem write
+ * @param cb call back function on event triggered
+ * @return successful?
+ */
 bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb){
         if(addr >= 1 << 16) return false;
         WatchPoint wp;
@@ -350,7 +379,10 @@ bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb
         return true;
 }
 
-
+/**
+ * @brief Helper function returns number of watch points
+ * @return number of watchpoints
+ */
 int simulator::getNumWatchPoints(){
         return this->watchPoints.size();
 }
