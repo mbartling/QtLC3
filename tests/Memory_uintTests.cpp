@@ -1,3 +1,4 @@
+#include "simulator.hpp"
 #include <chrono>
 #include <complex>
 #include <cstdint>
@@ -5,7 +6,6 @@
 #include <iostream>
 #include <stdexcept>
 #include <stdint.h>
-#include "simulator.hpp"
 #include "gtest/gtest.h"
 #include "LC3Helper.h"
 

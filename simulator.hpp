@@ -1,10 +1,10 @@
 #pragma once
 
+#include <Python.h>
 #include <string>
 #include <iostream>
 #include <vector>
 #include <stdint.h>
-#include <Python.h>
 
 constexpr int ADDRESS_SPACE = 1<<16;
 constexpr int NUM_REGS = 8;
@@ -19,6 +19,8 @@ struct WatchPoint {
         uint16_t address;
         uint16_t prevVal;
         uint16_t currVal;
+        bool readPoint;
+        bool writePoint;
         PyObject *cb;
 
 };
@@ -42,10 +44,11 @@ public:
         uint16_t getPC(void);
         bool setPC(uint16_t);
 
-        bool addWatchPoint(uint16_t addr, PyObject* cb);
+        bool addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb);
+        int getNumWatchPoints();
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
-        vector<WatchPoint> watchPoints;
+        vector<WatchPoint> watchPoints = vector<WatchPoint>();
         uint16_t N, Z, P, S;
         uint16_t PC;
         void setNZP( uint16_t );

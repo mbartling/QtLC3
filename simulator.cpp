@@ -1,6 +1,7 @@
 #include "simulator.hpp"
 #include "simulator-internals.hpp"
 #include "stdio.h"
+#include <boost/python.hpp>
 
 /**
  * @brief [brief description]
@@ -15,10 +16,16 @@ bool simulator::stepN( int cycles ) {
         do {
                 exceptionP = this->doInst(this->memRead(this->PC));
                 cyclesElapsed++;
-        }while (exceptionP && ((cycles < 0) || (cyclesElapsed < cycles)));
+        }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
         return exceptionP;
 }
 
+void callCallback (struct WatchPoint toCall) {
+        boost::python::call<void>(toCall.cb
+                                  , toCall.address
+                                  , toCall.prevVal
+                                  , toCall.currVal);
+}
 /**
  * @brief [brief description]
  * @details [long description]
@@ -27,6 +34,13 @@ bool simulator::stepN( int cycles ) {
  * @return [description]
  */
 uint16_t simulator::memRead( uint16_t addr ) {
+        for (std::vector<WatchPoint>::iterator it = this->watchPoints.begin()
+                     ; it != this->watchPoints.end()
+                     ; ++it){
+                if (it->readPoint && (it->address == addr)) {
+                        callCallback(*it);
+                }
+        }
         return this->memory[addr];
 }
 
@@ -39,6 +53,15 @@ uint16_t simulator::memRead( uint16_t addr ) {
  */
 void simulator::memWrite( uint16_t addr, uint16_t newVal ) {
         this->memory[addr] = newVal;
+        for (std::vector<WatchPoint>::iterator it = this->watchPoints.begin()
+                     ; it != this->watchPoints.end()
+                     ; ++it){
+                if (it->writePoint && (it->address == addr)) {
+                        it->currVal = newVal;
+                        callCallback(*it);
+                        it->prevVal = newVal;
+                }
+        }
 }
 
 /**
@@ -288,14 +311,20 @@ bool simulator::setPC(uint16_t pc){
 }
 
 
-bool simulator::addWatchPoint(uint16_t addr, PyObject* cb){
+bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb){
         if(addr >= 1 << 16) return false;
         WatchPoint wp;
         wp.cb = cb;
         wp.address = addr;
+        wp.readPoint = read;
+        wp.writePoint = write;
         wp.prevVal = memory[addr];
         wp.currVal = memory[addr];
         watchPoints.push_back(wp);
         return true;
 }
 
+
+int simulator::getNumWatchPoints(){
+        return this->watchPoints.size();
+}
