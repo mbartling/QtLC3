@@ -39,7 +39,7 @@ class SortingTest(unittest.TestCase):
                  upperHalf(2) | lowerHalf(87)]
     
     self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
-    self.run()
+    self.sim.run()
 
     progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
 
@@ -61,7 +61,7 @@ class SortingTest(unittest.TestCase):
 
     #Populate the simulator memory and run
     self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
-    self.run()
+    self.sim.run()
 
     progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
 
