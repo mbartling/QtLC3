@@ -17,7 +17,7 @@ DEFINES += USE_POPUP_COMPLETER
 unix {
   INCLUDEPATH += "/usr/include/python2.7/"
   #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
-  LIBS += -lpython2.7 -lutil
+  LIBS += -lpython2.7 -lutil -lboost_python -lboost_system
 }
 
 #SOURCES += main.cpp\

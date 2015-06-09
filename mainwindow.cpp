@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     helpSystem->hide();
 
     this->setWindowTitle("QtLC3");
+
+
     //Create the python console
     QMainWindow* pymw = new QMainWindow(this);
     pymw->setMinimumSize(640, 480);
@@ -31,8 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->addDockWidget(Qt::RightDockWidgetArea, dock);
     dock->setWidget(pymw);
     this->layout()->setContentsMargins(10,10,10,10);
-//    pymw->show();
     dock->hide();
+
+
     //Create the Memory space
     for(int i = 0; i < 65536; ++i){
           QTableWidgetItem* mItem = new QTableWidgetItem;
