@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LC3Sim
 TEMPLATE = app
 
+CONFIG += c++11
 LIBS += -Wl,-E -lpython2.7
 QT += widgets
 DEFINES += USE_POPUP_COMPLETER

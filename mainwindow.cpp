@@ -5,9 +5,11 @@
 #include <QDebug>
 #include <QFileDialog>
 #include "qpyconsole.h"
-
+#include <boost/python.hpp>
+#include "pythonInterface/pyInterface.cpp"
 QString int2lc3str(int num);
 QString GetTranslation(QString mInst);
+using namespace boost::python;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,7 +36,19 @@ MainWindow::MainWindow(QWidget *parent) :
     dock->setWidget(pymw);
     this->layout()->setContentsMargins(10,10,10,10);
     dock->hide();
+    qDebug() << "Done creating console";
 
+    //Must be done after pyconsole
+    mSim = new simulator();
+    try{
+    object main_namespace = pyConsole->getMainNamespace();
+    object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
+
+    main_namespace["pylc3"] = simulator_module;
+    scope(simulator_module).attr("sim") = ptr(&(*mSim));
+    } catch(error_already_set){
+        PyErr_Print();
+    }
 
     //Create the Memory space
     for(int i = 0; i < 65536; ++i){
