@@ -41,9 +41,12 @@ private slots:
     void on_actionConsole_triggered();
 
     void on_actionHelp_Me_triggered();
+    void on_actionPython_Console_triggered();
+
 private:
     Ui::MainWindow *ui;
     HelpSystem *helpSystem;
+    QDockWidget *dock;
 //    enum {numRegs = 8};
 //    QGroupBox *gridGroupBox;
 //    QLabel *regLabels[numRegs];

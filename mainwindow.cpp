@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDebug>
 #include <QFileDialog>
+#include "qpyconsole.h"
 
 QString int2lc3str(int num);
 QString GetTranslation(QString mInst);
@@ -15,6 +16,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     helpSystem = new HelpSystem(this);
     helpSystem->hide();
+
+    this->setWindowTitle("QtLC3");
+    //Create the python console
+    QMainWindow* pymw = new QMainWindow(this);
+    pymw->setMinimumSize(640, 480);
+    QPyConsole *pyConsole = QPyConsole::getInstance(pymw, "NOTE: DO NOT create a new sim object\n \
+    Please use 'sim'");
+    pymw->setFocusProxy((QWidget*)pyConsole);
+    pymw->setCentralWidget((QWidget*)pyConsole);
+
+    dock = new QDockWidget;
+    dock->setWindowTitle("Python Console");
+    this->addDockWidget(Qt::RightDockWidgetArea, dock);
+    dock->setWidget(pymw);
+    this->layout()->setContentsMargins(10,10,10,10);
+//    pymw->show();
+    dock->hide();
+    //Create the Memory space
     for(int i = 0; i < 65536; ++i){
           QTableWidgetItem* mItem = new QTableWidgetItem;
           QTableWidgetItem* mItemD = new QTableWidgetItem;
@@ -125,4 +144,9 @@ void MainWindow::on_actionConsole_triggered()
 void MainWindow::on_actionHelp_Me_triggered()
 {
     helpSystem->show();
+}
+
+void MainWindow::on_actionPython_Console_triggered()
+{
+    dock->show();
 }

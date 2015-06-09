@@ -65941,6 +65941,7 @@
     <addaction name="actionStep_Out"/>
     <addaction name="separator"/>
     <addaction name="actionConsole"/>
+    <addaction name="actionPython_Console"/>
    </widget>
    <widget class="QMenu" name="menuBreakpoints">
     <property name="title">
@@ -66032,6 +66033,11 @@
   <action name="actionHelp_Me">
    <property name="text">
     <string>Help Me</string>
+   </property>
+  </action>
+  <action name="actionPython_Console">
+   <property name="text">
+    <string>Python Console</string>
    </property>
   </action>
  </widget>

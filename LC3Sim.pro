@@ -11,6 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LC3Sim
 TEMPLATE = app
 
+LIBS += -Wl,-E -lpython2.7
+QT += widgets
+DEFINES += USE_POPUP_COMPLETER
+unix {
+  INCLUDEPATH += "/usr/include/python2.7/"
+  #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
+  LIBS += -lpython2.7 -lutil
+}
 
 #SOURCES += main.cpp\
 #        mainwindow.cpp \
@@ -18,10 +26,12 @@ TEMPLATE = app
 
 SOURCES += *.cpp
 
+
 #HEADERS  += mainwindow.h \
 #    lc3sim.h
 
 #FORMS    += mainwindow.ui
 
 HEADERS += *.h
+
 FORMS += *.ui
