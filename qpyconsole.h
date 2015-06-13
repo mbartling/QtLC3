@@ -28,7 +28,7 @@
 #define QPYCONSOLE_H
 
 #include "qconsole.h"
-
+#include <boost/python.hpp>
 /**An emulated singleton console for Python within a Qt application (based on the QConsole class)
  *@author Mondrian Nuessle
  */
@@ -44,6 +44,7 @@ public:
                                    const QString& welcomeText = "");
 
     void printHistory();
+    boost::python::object& getMainNamespace();
 
 protected:
     //give suggestions to complete a command (not working...)

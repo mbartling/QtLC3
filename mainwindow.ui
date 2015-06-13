@@ -68,7 +68,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -323,6 +323,9 @@
         </property>
         <property name="alternatingRowColors">
          <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <property name="cornerButtonEnabled">
          <bool>false</bool>

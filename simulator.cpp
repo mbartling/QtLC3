@@ -17,6 +17,12 @@ bool simulator::stepN( int cycles ) {
                 exceptionP = this->doInst(this->memRead(this->PC));
                 cyclesElapsed++;
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
+
+        //GUI Hook
+        if(onEndOfCycle){
+            onEndOfCycle();
+        }
+
         return exceptionP;
 }
 
@@ -43,12 +49,19 @@ bool simulator::loadBinFile( std::string filename ) {
         startAddr ^= startAddr >> 8;
         startAddr ^= ((startAddr & 0xFF) << 8);
         if (startAddr + fileSize - 2 > (1<<16)) return false;
+        setPC(startAddr);
         while (! in.eof()) {
                 in.read((char*)&data,2);
                 data ^= ((data & 0xFF) << 8);
                 data ^= data >> 8;
                 data ^= ((data & 0xFF) << 8);
+
+                //Update the GUI
+                if(onMemChanged){
+                    onMemChanged(startAddr, data);
+                }
                 this->memory[startAddr++] = data;
+
         }
         in.close();
         return true;
@@ -104,6 +117,9 @@ void simulator::memWrite( uint16_t addr, uint16_t newVal ) {
                         callCallback(*it);
                         it->prevVal = newVal;
                 }
+        }
+        if(onMemChanged){
+            onMemChanged(addr, newVal);
         }
 }
 
@@ -294,6 +310,10 @@ bool simulator::setPcsrBit( char mnemonic , bool newVal) {
                 return false;
 
         }
+        //GUI Hook
+        if(onEndOfCycle){
+            onEndOfCycle();
+        }
         return true;
 
 }
@@ -323,6 +343,10 @@ bool simulator::setReg( int number, uint16_t newVal ) {
                 return false;
         } else {
                 this->regs[number] = newVal;
+               //GUI Hook
+                if(onEndOfCycle){
+                    onEndOfCycle();
+                }
                 return true;
         }
 }
@@ -350,6 +374,10 @@ uint16_t simulator::getPC(void){ return PC; }
 bool simulator::setPC(uint16_t pc){
         if(pc >= ADDRESS_SPACE) return false;
         this->PC = pc;
+        //GUI Hook
+        if(onEndOfCycle){
+            onEndOfCycle();
+        }
         return true;
 }
 
@@ -394,4 +422,14 @@ bool simulator::run(){
     }
 
     return true;
+}
+
+void doJack(uint16_t address, uint16_t newVal){
+    return;
+}
+void simulator::setOnMemChanged(std::function<void (uint16_t, uint16_t)> handlerFunction){
+    onMemChanged = handlerFunction;
+}
+void simulator::setOnEndOfCycle(std::function<void (void)> handlerFunction){
+    onEndOfCycle = handlerFunction;
 }

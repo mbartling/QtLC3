@@ -8,9 +8,9 @@ HelpSystem::HelpSystem(QWidget *parent) :
     ui->setupUi(this);
 
     model = new QFileSystemModel;
-    model->setRootPath(QCoreApplication::applicationDirPath());
+    model->setRootPath(QCoreApplication::applicationDirPath() + "/help");
     ui->helpFileTree->setModel(model);
-    ui->helpFileTree->setRootIndex(model->index(QCoreApplication::applicationDirPath()));
+    ui->helpFileTree->setRootIndex(model->index(QCoreApplication::applicationDirPath()+ "/help"));
     qDebug() << QCoreApplication::applicationDirPath();
 }
 

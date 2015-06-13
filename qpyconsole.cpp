@@ -194,16 +194,12 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
              unifying global and local name with __main__.__dict__, we
              can get more natural python console.
     */
-//    object main_module((handle<>(borrowed(PyImport_AddModule("__main__")))));
     qDebug() << "Creating Python Module";
     PyObject *module = PyImport_ImportModule("__main__");
-//    PyObject *module = PyImport_AddModule("__main__");
 
-    //    module = object;
     loc = glb = PyModule_GetDict(module);
     qDebug() << "Got dict?";
     main_module = new object(handle<>(module));
-//    object main_namespace = main_module.attr("__dict__");
     main_namespace = new object(handle<>(loc));
     qDebug() << "Got Handles";
     initredirector();

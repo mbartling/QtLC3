@@ -7,9 +7,23 @@
 #include "qpyconsole.h"
 #include <boost/python.hpp>
 #include "pythonInterface/pyInterface.cpp"
+#include <string>
+
 QString int2lc3str(int num);
+QString uint16_t2lc3str(uint16_t);
 QString GetTranslation(QString mInst);
+QString bool2String(bool b){
+    QString res;
+    if(b) res = "1";
+    else res = "0";
+    return res;
+}
+
 using namespace boost::python;
+
+void onMemChanged(uint16_t address, uint16_t newVal){
+
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow* pymw = new QMainWindow(this);
     pymw->setMinimumSize(640, 480);
     QPyConsole *pyConsole = QPyConsole::getInstance(pymw, "NOTE: DO NOT create a new sim object\n \
-    Please use 'sim'");
+    Please use 'pylc3.sim' as you simulator object");
     pymw->setFocusProxy((QWidget*)pyConsole);
     pymw->setCentralWidget((QWidget*)pyConsole);
 
@@ -40,12 +54,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Must be done after pyconsole
     mSim = new simulator();
-    try{
-    object main_namespace = pyConsole->getMainNamespace();
-    object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
+    mSim->setOnMemChanged([this](uint16_t address, uint16_t newVal){
+        QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
+        mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
+        //Will Do translation here too
+    } );
 
-    main_namespace["pylc3"] = simulator_module;
-    scope(simulator_module).attr("sim") = ptr(&(*mSim));
+    updateRegs = [this](){
+            ui->tableMem->setCurrentCell(mSim->getPC(), 1);
+            ui->lineR8->setText(uint16_t2lc3str(mSim->getPC()));
+            ui->lineR0->setText(uint16_t2lc3str(mSim->getReg(0)));
+            ui->lineR1->setText(uint16_t2lc3str(mSim->getReg(1)));
+            ui->lineR2->setText(uint16_t2lc3str(mSim->getReg(2)));
+            ui->lineR3->setText(uint16_t2lc3str(mSim->getReg(3)));
+            ui->lineR4->setText(uint16_t2lc3str(mSim->getReg(4)));
+            ui->lineR5->setText(uint16_t2lc3str(mSim->getReg(5)));
+            ui->lineR6->setText(uint16_t2lc3str(mSim->getReg(6)));
+            ui->lineR7->setText(uint16_t2lc3str(mSim->getReg(7)));
+            ui->lineN->setText(bool2String(mSim->getPcsrBit('n')));
+            ui->lineZ->setText(bool2String(mSim->getPcsrBit('z')));
+            ui->lineP->setText(bool2String(mSim->getPcsrBit('p')));
+
+            setCurrentRow((int) mSim->getPC() & 0xFFFF);
+        };
+
+    mSim->setOnEndOfCycle(updateRegs);
+    try{
+        object main_namespace = pyConsole->getMainNamespace();
+        object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
+
+        main_namespace["pylc3"] = simulator_module;
+        scope(simulator_module).attr("sim") = ptr(&(*mSim));
     } catch(error_already_set){
         PyErr_Print();
     }
@@ -64,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->tableMem->setItem(i,2,mItemD);
           ui->tableMem->setItem(i,3,mItemT);
     }
+    updateRegs();
 }
 
 MainWindow::~MainWindow()
@@ -75,6 +115,11 @@ void MainWindow::on_actionOpen_triggered()
 {
     QString filename;
     filename = QFileDialog::getOpenFileName(this, tr("Open Program"), QDir::currentPath(), tr("Object Files (*.obj);;All files (*.*)"));
+    std::string fname = filename.toLatin1().constData();
+    mSim->loadBinFile(fname);
+    int rowId = ((int) mSim->getPC() & 0xFFFF);
+    ui->tableMem->setCurrentCell(rowId, 1);
+
 }
 
 void MainWindow::on_actionReset_triggered()
@@ -89,7 +134,7 @@ void MainWindow::on_actionStep_triggered()
 
 void MainWindow::on_actionNext_triggered()
 {
-    
+    mSim->stepN(1);
 }
 
 void MainWindow::on_actionContinue_triggered()
@@ -119,7 +164,9 @@ int lc3hex2int(QString& mStr){
 QString int2lc3str(int num){
     return QString("x%1").arg(num,4, 16, QChar('0'));
 }
-
+QString uint16_t2lc3str(uint16_t num){
+    return QString("x%1").arg(num,4, 16, QChar('0'));
+}
 void MainWindow::on_GoButton_clicked()
 {
     QString mAddr = ui->lineMem->text();
@@ -167,3 +214,10 @@ void MainWindow::on_actionPython_Console_triggered()
 {
     dock->show();
 }
+
+void MainWindow::onMemChanged(uint16_t address, uint16_t newVal){
+    QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
+    mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
+    //Will Do translation here too
+}
+
