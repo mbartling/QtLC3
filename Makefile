@@ -55,4 +55,4 @@ $(TEST): $(filter-out pythonInterface/%, ${OBJS})
 	$(CXX) -c ${CXXFLAGS} -MD -o $@ $< -MT ${@:.o=.d}
 
 clean:
-	-rm -rf ${OBJS} ${DEPS} ${TEST}
+	-@rm -rf ${OBJS} ${DEPS} ${TEST}
