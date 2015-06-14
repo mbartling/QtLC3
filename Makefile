@@ -22,6 +22,7 @@ CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall
 CXXFLAGS += -Wno-sign-compare
 CXXFLAGS += -Werror
+CXXFLAGS += -fPIC
 DEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
 PYDEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
 
@@ -42,9 +43,8 @@ test: $(TEST)
 
 python: $(PYLC3)
 
-$(PYLC3): CXXFLAGS += -fPIC -shared
 $(PYLC3): $(filter-out tests/%, ${OBJS})
-	$(CXX) $^ $(PYDEFS) $(CXXFLAGS) ${LDFLAGS} -o $@
+	$(CXX) $^ $(PYDEFS) $(CXXFLAGS) -shared ${LDFLAGS} -o $@
 
 $(TEST): $(filter-out pythonInterface/%, ${OBJS})
 	$(CXX) $^ $(EXTRA_TESTS) $(GTEST_LIB) $(DEFS) $(CXXFLAGS) ${LDFLAGS} -pthread -o $@
