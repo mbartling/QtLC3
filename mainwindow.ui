@@ -65987,6 +65987,9 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionOptions">
    <property name="text">
@@ -66002,20 +66005,32 @@
    <property name="text">
     <string>Reset</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionNext">
    <property name="text">
     <string>Next</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionStep">
    <property name="text">
     <string>Step</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionContinue">
    <property name="text">
     <string>Continue</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -66037,10 +66052,24 @@
    <property name="text">
     <string>Help Me</string>
    </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
   </action>
   <action name="actionPython_Console">
    <property name="text">
     <string>Python Console</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="actionGoTo">
+   <property name="text">
+    <string>GoTo</string>
+   </property>
+   <property name="toolTip">
+    <string>Go to a line</string>
    </property>
   </action>
  </widget>

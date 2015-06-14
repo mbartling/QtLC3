@@ -21,9 +21,6 @@ QString bool2String(bool b){
 
 using namespace boost::python;
 
-void onMemChanged(uint16_t address, uint16_t newVal){
-
-}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -54,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Must be done after pyconsole
     mSim = new simulator();
+
+    //Add the GUI Hooks to the simulator
     mSim->setOnMemChanged([this](uint16_t address, uint16_t newVal){
         QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
         mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
@@ -78,7 +77,9 @@ MainWindow::MainWindow(QWidget *parent) :
             setCurrentRow((int) mSim->getPC() & 0xFFFF);
         };
 
+    //Go ahead and update the registers
     mSim->setOnEndOfCycle(updateRegs);
+
     try{
         object main_namespace = pyConsole->getMainNamespace();
         object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
@@ -139,7 +140,7 @@ void MainWindow::on_actionNext_triggered()
 
 void MainWindow::on_actionContinue_triggered()
 {
-    
+    mSim->run();
 }
 
 void MainWindow::createGrid(){
@@ -149,7 +150,7 @@ void MainWindow::createGrid(){
 void MainWindow::on_actionAbout_triggered()
 {
 //    QMessageBox mAbout(this);
-    QMessageBox::about(this, "About LC3-sim", "This QT LC3 Simulator was written by:\n Michael Bartling\nmichael.bartling15@gmail.com\ngithub.com/mbartling\n\nUniversity of Texas at Austin\nComputer Architecture and Embedded Processing Group.\nSpring 2015");
+    QMessageBox::about(this, "About LC3-sim", "This QT LC3 Simulator was written by:\n Michael Bartling And Jimmy Brisson\nmichael.bartling15@gmail.com\ngithub.com/mbartling\n\nUniversity of Texas at Austin\nComputer Architecture and Embedded Processing Group.\nSpring 2015");
 }
 
 int lc3hex2int(QString& mStr){

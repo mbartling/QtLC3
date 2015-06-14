@@ -7,6 +7,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include "helpsystem.h"
+#include "simulator.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -42,11 +43,15 @@ private slots:
 
     void on_actionHelp_Me_triggered();
     void on_actionPython_Console_triggered();
+    void onMemChanged(uint16_t, uint16_t);
 
 private:
     Ui::MainWindow *ui;
     HelpSystem *helpSystem;
     QDockWidget *dock;
+    simulator* mSim;
+    std::function<void (void)> updateRegs;
+
 //    enum {numRegs = 8};
 //    QGroupBox *gridGroupBox;
 //    QLabel *regLabels[numRegs];
