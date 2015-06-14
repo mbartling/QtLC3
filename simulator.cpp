@@ -16,6 +16,14 @@ bool simulator::stepN( int cycles ) {
         do {
                 exceptionP = this->doInst(this->memRead(this->PC));
                 cyclesElapsed++;
+                for (std::vector<BreakPoint>::iterator it = this->breakPoints.begin()
+                             ; it != this->breakPoints.end()
+                             ; ++it){
+                        if (it->address == this->PC) {
+                                boost::python::call<void>(it->cb
+                                                          , it->address);
+                        }
+                }
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
         return exceptionP;
 }
@@ -354,3 +362,13 @@ bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb
 int simulator::getNumWatchPoints(){
         return this->watchPoints.size();
 }
+
+bool simulator::addBreakPoint(uint16_t addr, PyObject* cb) {
+        if(addr >= 1<<16) return false;
+        BreakPoint bp;
+        bp.cb = cb;
+        bp.address = addr;
+        breakPoints.push_back(bp);
+        return true;
+}
+

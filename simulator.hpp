@@ -24,6 +24,11 @@ struct WatchPoint {
         PyObject *cb;
 
 };
+
+struct BreakPoint {
+        uint16_t address;
+        PyObject *cb;
+};
 /**
  * @brief Basic LC3 Simulator Class
  * @details This class is exposed to the Python Interface,
@@ -45,11 +50,13 @@ public:
         bool setPC(uint16_t);
 
         bool addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb);
+        bool addBreakPoint(uint16_t addr, PyObject* cb);
         int getNumWatchPoints();
         bool loadBinFile(std::string);
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();
+        vector<BreakPoint> breakPoints = vector<BreakPoint>();
         uint16_t N, Z, P, S;
         uint16_t PC;
         void setNZP( uint16_t );

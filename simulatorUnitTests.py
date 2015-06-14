@@ -139,6 +139,38 @@ class TestWatchPoint(unittest.TestCase):
     self.sim.stepN(5)
     self.assertEqual(2, self.called)
 
+class TestBreakPoint(unittest.TestCase):
+  def setUp(self):
+    self.sim = pylc3.simulator()
+
+  def test_Break(self):
+    self.called = False
+    def watch (a):
+      self.called = True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addBreakPoint(0x3002, watch)
+    self.sim.stepN(5)
+    self.assertEqual(True, self.called)
+
+  def test_NotBreak(self):
+    self.called = False
+    def watch (a):
+      self.called = True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addBreakPoint(0x2FFF, watch)
+    self.sim.stepN(5)
+    self.assertEqual(False, self.called)
+
 # if __name__ == '__main__':
   #If Prints OK then ALL TESTS PASSED
   # YAY 
@@ -160,3 +192,4 @@ def doTest(testCase):
 doTest(TestAdd)
 doTest(TestAnd)
 doTest(TestWatchPoint)
+doTest(TestBreakPoint)
