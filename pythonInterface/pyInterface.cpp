@@ -12,7 +12,7 @@ BOOST_PYTHON_MODULE(pylc3)
   class_<MEM_type>("memory")
     .def(vector_indexing_suite<MEM_type>());
 
-  class_<simulator>("simulator")
+  object pySim = class_<simulator>("simulator")
     .def("stepN", &simulator::stepN)
     .def("doInst"  , &simulator::doInst)
     .def_readwrite("mem", &simulator::memory)
@@ -21,9 +21,12 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("getPcsrBit", &simulator::getPcsrBit)
     .def("setPcsrBit", &simulator::setPcsrBit)
     .def("addWatchPoint", &simulator::addWatchPoint)
+    .def("addBreakPoint", &simulator::addBreakPoint)
     .def("getNumWatchPoints", &simulator::getNumWatchPoints)
     .def("load", &simulator::loadBinFile)
     .def("run", &simulator::run)
-    .def("getPC", &simulator::getPC)
+    .def("getPC", &simulator::getPC) 
     .def("setPC", &simulator::setPC);
+
+    object mSim = pySim(); //Construct one
 }
