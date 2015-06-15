@@ -25,6 +25,7 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("getNumWatchPoints", &simulator::getNumWatchPoints)
     .def("load", &simulator::loadBinFile)
     .def("run", &simulator::run)
+    .def("refreshGUI", &simulator::refreshGUIMemCall)
     .def("getPC", &simulator::getPC) 
     .def("setPC", &simulator::setPC);
 

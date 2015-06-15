@@ -80,6 +80,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //Go ahead and update the registers
     mSim->setOnEndOfCycle(updateRegs);
 
+    mSim->setRefreshGUIMemHook([this](){
+        for(int address = 0; address < 65536; ++address){
+            QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
+            mItem->setText("x" + QString("%1").arg(mSim->memory[address],4, 16, QChar('0')));
+
+        }
+    });
+
     try{
         object main_namespace = pyConsole->getMainNamespace();
         object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));

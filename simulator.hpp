@@ -58,8 +58,8 @@ public:
         bool run();
         void setOnMemChanged(std::function<void (uint16_t, uint16_t)> handlerFunction);
         void setOnEndOfCycle(std::function<void (void)> handlerFunction);
-
-
+        void setRefreshGUIMemHook(std::function<void (void)> handlerFunction);
+        void refreshGUIMemCall(void);
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();
@@ -71,5 +71,7 @@ private:
         void memWrite( uint16_t addr, uint16_t newVal );
         std::function<void (uint16_t, uint16_t)> onMemChanged;
         std::function<void (void)> onEndOfCycle;
+        std::function<void (void)> refreshGUIMem;
+
 
 };

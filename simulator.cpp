@@ -450,3 +450,9 @@ void simulator::setOnMemChanged(std::function<void (uint16_t, uint16_t)> handler
 void simulator::setOnEndOfCycle(std::function<void (void)> handlerFunction){
     onEndOfCycle = handlerFunction;
 }
+void simulator::setRefreshGUIMemHook(std::function<void (void)> handlerFunction){
+    refreshGUIMem = handlerFunction;
+}
+void simulator::refreshGUIMemCall(void){
+    if(refreshGUIMem) refreshGUIMem();
+}
