@@ -22,11 +22,14 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("setPcsrBit", &simulator::setPcsrBit)
     .def("addWatchPoint", &simulator::addWatchPoint)
     .def("addBreakPoint", &simulator::addBreakPoint)
+    .def("addInterruptTrigger", &simulator::addInterruptTrigger)
     .def("getNumWatchPoints", &simulator::getNumWatchPoints)
     .def("load", &simulator::loadBinFile)
     .def("run", &simulator::run)
-    .def("getPC", &simulator::getPC) 
-    .def("setPC", &simulator::setPC);
+    .def("getPC", &simulator::getPC)
+    .def("setPC", &simulator::setPC)
+    .def("getPriority", &simulator::getPriority)
+    .def("setPriority", &simulator::setPriority);
 
     object mSim = pySim(); //Construct one
 }

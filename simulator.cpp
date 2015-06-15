@@ -24,6 +24,32 @@ bool simulator::stepN( int cycles ) {
                                                           , it->address);
                         }
                 }
+                for (std::vector<InterruptTrigger>::iterator it
+                             = this->interruptTriggers.begin()
+                             ; it != this->interruptTriggers.end()
+                             ; ++it){
+                        if (!it->triggeredP && boost::python::call<bool>(it->cb)) {
+                                it->triggeredP = true;
+                        }
+                        if (it->triggeredP && it->priority > this->Priority) {
+                                it->triggeredP = false;
+                                if (this->getPcsrBit('s')) {
+                                        this->USP = this->getReg(6);
+                                        this->setReg(6,this->SSP);
+                                }
+                                this->setReg(6, this->getReg(6) - 1);
+                                this->memWrite(this->getReg(6)
+                                               , this->getPcsrBit('s') << 15
+                                               | this->Priority << 8
+                                               | this->getPcsrBit('n') << 2
+                                               | this->getPcsrBit('z') << 1
+                                               | this->getPcsrBit('p') << 0);
+                                this->setReg(6, this->getReg(6) - 1);
+                                this->memWrite(this->getReg(6),this->PC);
+                                this->setPcsrBit('s',false);
+                                this->PC = this->memRead(it->address + 0x100);
+                        }
+                }
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
 
         //GUI Hook
@@ -223,10 +249,15 @@ bool simulator::doInst( uint16_t inst ) {
                 this->regs[6]++;
                 result = this->memRead(this->regs[6]);
                 this->S = (result & (1 << 15)) != 0;
+                this->Priority = (result & (0x7 << 8)) >> 8;
                 this->N = (result & (1 << 2))  != 0;
                 this->Z = (result & (1 << 1))  != 0;
                 this->P = (result & (1 << 0))  != 0;
                 this->regs[6]++;
+                if (this->S == 1) {
+                        this->SSP = this->getReg(6);
+                        this->setReg(6,this->USP);
+                }
                 break;
 
         default:
@@ -389,6 +420,13 @@ bool simulator::setPC(uint16_t pc){
         return true;
 }
 
+uint16_t simulator::getPriority(void){ return this->Priority; }
+bool simulator::setPriority(uint8_t newPriority){
+        if(Priority >= 8) return false;
+        this->Priority = newPriority;
+        return true;
+}
+
 /**
  * @brief Add a watch point to the simulator
  * @details Watch points can be triggered on any combination of read/write
@@ -449,4 +487,15 @@ void simulator::setOnMemChanged(std::function<void (uint16_t, uint16_t)> handler
 }
 void simulator::setOnEndOfCycle(std::function<void (void)> handlerFunction){
     onEndOfCycle = handlerFunction;
+}
+
+bool simulator::addInterruptTrigger(uint8_t intnum, uint8_t priority, PyObject* cb) {
+        if(intnum < 1<<7) return false;
+        InterruptTrigger it;
+        it.cb = cb;
+        it.address = intnum;
+        it.priority = priority;
+        it.triggeredP = false;
+        interruptTriggers.push_back(it);
+        return true;
 }
