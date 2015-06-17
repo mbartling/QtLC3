@@ -48,6 +48,7 @@ public:
         using MEM_type = vector<uint16_t>;
         vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
         bool stepN( int cycles );
+        bool nextN( int cycles );
         bool doInst( uint16_t );
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
         uint16_t getReg ( int number );
@@ -82,6 +83,7 @@ private:
         void setNZP( uint16_t );
         uint16_t memRead( uint16_t addr );
         void memWrite( uint16_t addr, uint16_t newVal );
+        bool simulate( int cycles, bool countFunctionsP, bool stopOnRetP);
         std::function<void (uint16_t, uint16_t)> onMemChanged;
         std::function<void (void)> onEndOfCycle;
 

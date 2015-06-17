@@ -10,13 +10,39 @@
  * @param cycles number of cycles to step
  * @return false if exception occurred
  */
-bool simulator::stepN( int cycles ) {
+bool simulator::stepN( int cycles){
+        return this->simulate(cycles, true, false);
+}
+
+bool simulator::nextN( int cycles){
+        return this->simulate(cycles, false, false);
+}
+
+bool callsFunctionP( uint16_t instruction) {
+        enum opcode op = inst2opcode(instruction);
+        return (((op == JSR)) || (op == TRAP));
+}
+
+bool returnsP( uint16_t instruction) {
+        enum opcode op = inst2opcode(instruction);
+        return ((op == RTI) || ((op == JMP) && (inst2sr1(instruction) == 7)));
+}
+
+
+bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         int cyclesElapsed = 0;
         bool exceptionP = true;
+        uint16_t lastinst = 0;
+        int callCount = 0, retCount = 0;
         do {
+                lastinst = this->memory[this->PC];
                 exceptionP = this->doInst(this->memRead(this->PC));
-                cyclesElapsed++;
-                for (std::vector<BreakPoint>::iterator it = this->breakPoints.begin()
+                if (returnsP(lastinst)) retCount++;
+                else if (callsFunctionP(lastinst))callCount++;
+                if (retCount > callCount) retCount = callCount = 0;
+                if (countCallsP || retCount == callCount) cyclesElapsed++;
+                for (std::vector<BreakPoint>::iterator it
+                             = this->breakPoints.begin()
                              ; it != this->breakPoints.end()
                              ; ++it){
                         if (it->address == this->PC) {

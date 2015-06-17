@@ -14,6 +14,7 @@ BOOST_PYTHON_MODULE(pylc3)
 
   object pySim = class_<simulator>("simulator")
     .def("stepN", &simulator::stepN)
+    .def("nextN", &simulator::nextN)
     .def("doInst"  , &simulator::doInst)
     .def_readwrite("mem", &simulator::memory)
     .def("getReg"  , &simulator::getReg)
