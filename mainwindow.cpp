@@ -146,6 +146,7 @@ void MainWindow::on_actionOpen_triggered()
     QString filename;
     filename = QFileDialog::getOpenFileName(this, tr("Open Program"), QDir::currentPath(), tr("Object Files (*.obj);;All files (*.*)"));
     std::string fname = filename.toLatin1().constData();
+    fileVec.push_back(fname);
     mSim->loadBinFile(fname);
     int rowId = ((int) mSim->getPC() & 0xFFFF);
     ui->tableMem->setCurrentCell(rowId, 1);
@@ -154,17 +155,26 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionReset_triggered()
 {
-    
+    //First reload all of the Programs
+    for(auto fname : fileVec){
+        mSim->loadBinFile(fname);
+        int rowId = ((int) mSim->getPC() & 0xFFFF);
+        ui->tableMem->setCurrentCell(rowId, 1);
+    }
+    //Clear the Registers
+    for(int i = 0; i < 8; ++i){
+        mSim->setReg(i, 0);
+    }
 }
 
 void MainWindow::on_actionStep_triggered()
 {
-    
+     mSim->stepN(1);
 }
 
 void MainWindow::on_actionNext_triggered()
 {
-    mSim->stepN(1);
+    mSim->nextN(1);
 }
 
 void MainWindow::on_actionContinue_triggered()

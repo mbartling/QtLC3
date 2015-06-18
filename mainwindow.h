@@ -8,7 +8,7 @@
 #include <QLabel>
 #include "helpsystem.h"
 #include "simulator.hpp"
-
+#include <vector>
 namespace Ui {
 class MainWindow;
 }
@@ -52,8 +52,8 @@ private:
     QDockWidget *dockConsole;
     simulator* mSim;
     std::function<void (void)> updateRegs;
-
-//    enum {numRegs = 8};
+    std::vector<std::string> fileVec; //Maintain a list of loaded files
+    //    enum {numRegs = 8};
 //    QGroupBox *gridGroupBox;
 //    QLabel *regLabels[numRegs];
 //    QLineEdit *regLines[numRegs];
