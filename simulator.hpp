@@ -29,6 +29,12 @@ struct BreakPoint {
         uint16_t address;
         PyObject *cb;
 };
+struct InterruptTrigger {
+        uint8_t address;
+        uint8_t priority;
+        PyObject *cb;
+        bool triggeredP;
+};
 
 void doJack(uint16_t, uint16_t);
 /**
@@ -42,6 +48,7 @@ public:
         using MEM_type = vector<uint16_t>;
         vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
         bool stepN( int cycles );
+        bool nextN( int cycles );
         bool doInst( uint16_t );
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
         uint16_t getReg ( int number );
@@ -50,9 +57,12 @@ public:
         bool setPcsrBit ( char mnemonic , bool newVal);
         uint16_t getPC(void);
         bool setPC(uint16_t);
+        uint16_t getPriority(void);
+        bool setPriority(uint8_t newPriority);
 
         bool addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb);
         bool addBreakPoint(uint16_t addr, PyObject* cb);
+        bool addInterruptTrigger(uint8_t intnum, uint8_t priority, PyObject* cb);
         int getNumWatchPoints();
         bool loadBinFile(std::string);
         bool run();
@@ -67,10 +77,14 @@ private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();
         vector<BreakPoint> breakPoints = vector<BreakPoint>();
+        vector<InterruptTrigger> interruptTriggers = vector<InterruptTrigger>();
         uint16_t N, Z, P, S;
         uint16_t PC;
+        uint8_t Priority;
+        uint16_t SSP;
+        uint16_t USP;
         void setNZP( uint16_t );
-
+        bool simulate( int cycles, bool countFunctionsP, bool stopOnRetP);
         std::function<void (uint16_t, uint16_t)> onMemChanged;
         std::function<void (void)> onEndOfCycle;
         std::function<void (void)> refreshGUIMem;
