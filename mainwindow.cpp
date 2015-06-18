@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include "qpyconsole.h"
+#include "lc3console.h"
 #include <boost/python.hpp>
 #include "pythonInterface/pyInterface.cpp"
 #include <string>
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     helpSystem = new HelpSystem(this);
+    helpSystem->setWindowTitle("Help");
+    helpSystem->setObjectName("Help");
+    this->addDockWidget(Qt::RightDockWidgetArea, helpSystem);
     helpSystem->hide();
 
     this->setWindowTitle("QtLC3");
@@ -41,14 +45,29 @@ MainWindow::MainWindow(QWidget *parent) :
     pymw->setFocusProxy((QWidget*)pyConsole);
     pymw->setCentralWidget((QWidget*)pyConsole);
 
-    dock = new QDockWidget;
-    dock->setWindowTitle("Python Console");
-    this->addDockWidget(Qt::RightDockWidgetArea, dock);
-    dock->setWidget(pymw);
+    dockPy = new QDockWidget;
+    dockPy->setWindowTitle("Python Console");
+    this->addDockWidget(Qt::RightDockWidgetArea, dockPy);
+    dockPy->setWidget(pymw);
     this->layout()->setContentsMargins(10,10,10,10);
-    dock->hide();
-    qDebug() << "Done creating console";
+    dockPy->hide();
 
+    //Create the LC3 Console
+    QMainWindow* mConsoleW = new QMainWindow(this);
+    mConsoleW->setMinimumSize(640, 480);
+    lc3Console *mConsole = new lc3Console(mConsoleW);
+    mConsoleW->setFocusProxy((QWidget*)mConsole);
+    mConsoleW->setCentralWidget((QWidget*)mConsole);
+
+    dockConsole = new QDockWidget;
+    dockConsole->setWindowTitle("LC3 Terminal");
+    dockConsole->setObjectName("LC3 Terminal");
+    this->addDockWidget(Qt::RightDockWidgetArea, dockConsole);
+    dockConsole->setWidget(mConsoleW);
+    dockConsole->hide();
+    tabifyDockWidget(dockPy, dockConsole);
+    qDebug() << "Done creating console";
+    tabifyDockWidget(dockConsole, helpSystem);
     //Must be done after pyconsole
     mSim = new simulator();
 
@@ -88,6 +107,8 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
+    //Add the simulator to the console
+    mConsole->setSimulator(mSim);
     try{
         object main_namespace = pyConsole->getMainNamespace();
         object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
@@ -211,7 +232,7 @@ QString GetTranslation(QString mInst){
 
 void MainWindow::on_actionConsole_triggered()
 {
-
+    dockConsole->show();
 }
 
 void MainWindow::on_actionHelp_Me_triggered()
@@ -221,7 +242,7 @@ void MainWindow::on_actionHelp_Me_triggered()
 
 void MainWindow::on_actionPython_Console_triggered()
 {
-    dock->show();
+    dockPy->show();
 }
 
 void MainWindow::onMemChanged(uint16_t address, uint16_t newVal){

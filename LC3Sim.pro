@@ -33,6 +33,7 @@ SOURCES += *.cpp
 
 #FORMS    += mainwindow.ui
 
-HEADERS += *.h
+HEADERS += *.h \
+        *.hpp
 
 FORMS += *.ui

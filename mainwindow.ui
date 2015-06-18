@@ -66047,6 +66047,9 @@
    <property name="text">
     <string>Console</string>
    </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
   </action>
   <action name="actionHelp_Me">
    <property name="text">

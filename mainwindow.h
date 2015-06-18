@@ -48,7 +48,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     HelpSystem *helpSystem;
-    QDockWidget *dock;
+    QDockWidget *dockPy;
+    QDockWidget *dockConsole;
     simulator* mSim;
     std::function<void (void)> updateRegs;
 
