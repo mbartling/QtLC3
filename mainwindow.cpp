@@ -8,6 +8,7 @@
 #include "lc3console.h"
 #include <boost/python.hpp>
 #include "pythonInterface/pyInterface.cpp"
+#include "simulator-internals.hpp"
 #include <string>
 
 QString int2lc3str(int num);
@@ -74,8 +75,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add the GUI Hooks to the simulator
     mSim->setOnMemChanged([this](uint16_t address, uint16_t newVal){
         QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
-        mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
+        //mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
         //Will Do translation here too
+        QString instText = "x" + QString("%1").arg(newVal,4, 16, QChar('0'));
+        QString trannyText = GetTranslation(instText);
+        mItem->setText(instText);
+
+        QTableWidgetItem* mItem2 = ui->tableMem->item(address, 3); //Set the translation
+        mItem2->setText(trannyText); //I am the whole tranny
     } );
 
     updateRegs = [this](){
@@ -196,7 +203,7 @@ int lc3hex2int(QString& mStr){
     QString temp = mStr;
     bool ok;
     int res = temp.remove(0,1).toInt(&ok,16);
-    qDebug() << "Converting from x to int status: " << ok;
+    //qDebug() << "Converting from x to int status: " << ok;
     return res;
 
 }
@@ -232,11 +239,112 @@ void MainWindow::setCurrentRow(int rowId){
     ui->tableMem->setCurrentCell(rowId, 1);
 
 }
+
 QString GetTranslation(QString mInst){
     QString res;
+    QString result;
     if(mInst == "x0000") res = "NOP";
-    else res = ".FILL " + mInst;
+    else{// res = ".FILL " + mInst;
+        uint16_t inst = (uint16_t) lc3hex2int(mInst);
+        switch (inst2opcode(inst)) {
+        case ADD:
+                if (inst2steering(inst)) {
+                    result = QString("ADD R") + QString((char) '0' + inst2sr1(inst)) \
+                        + QString(", ") + uint16_t2lc3str(inst2imm5(inst));
+                } else {
+                    result = QString("ADD R") + QString((char) '0' + inst2sr1(inst)) \
+                        + QString(", R") + QString((char) '0' + inst2sr2(inst));
+                }
+                break;
 
+        case AND:
+            if (inst2steering(inst)) {
+                result = QString("AND R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", R") + QString((char) '0' + inst2sr1(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm5(inst));
+            } else {
+                result = QString("AND R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", R") + QString((char) '0' + inst2sr1(inst)) \
+                    + QString(", R") + QString((char) '0' + inst2sr2(inst));
+            }
+            break;
+
+        case NOT:
+            result = QString("NOT R") + QString((char) '0' + inst2sr1(inst));
+            break;
+        case LD:
+            result = QString("LD R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+        case LDI:
+            result = QString("LDI R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+        case ST:
+            result = QString("ST R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+        case STI:
+            result = QString("STI R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+        case LEA:
+            result = QString("LEA R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+
+        case LDR:
+            result = QString("LDR R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", R") + QString((char) '0' + inst2sr1(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm6(inst));
+            break;
+        case STR:
+            result = QString("LDR R") + QString((char) '0' + inst2dr(inst)) \
+                    + QString(", R") + QString((char) '0' + inst2sr1(inst)) \
+                    + QString(", ") + uint16_t2lc3str(inst2imm6(inst));
+            break;
+
+        case BR:
+        { //Freaking scope rules
+            QString qN = (inst2n(inst)) ? QString("n") : QString("");
+            QString qZ = (inst2z(inst)) ? QString("z") : QString("");
+            QString qP = (inst2p(inst)) ? QString("p") : QString("");
+
+            result = QString("BR") + qN + qZ + qP \
+                    + QString(" ") + uint16_t2lc3str(inst2imm9(inst));
+            break;
+        }// Google it for an interesting read
+        case JSR:
+            result = QString("JSR");
+            if (inst2n(inst))
+                result += uint16_t2lc3str(inst2imm11(inst));
+            else
+                result += QString("R R") + QString((char) '0' + inst2sr1(inst));
+            break;
+        case JMP:
+            if(inst2sr1(inst) == 7){
+                result = QString("RET");
+            }
+            else {
+                result = QString("JMP");
+                result += QString(" R") + QString((char) '0' + inst2sr1(inst));
+            }
+            break;
+
+        case TRAP:
+            result = QString("TRAP ") + uint16_t2lc3str(inst2trapvec8(inst));
+            break;
+
+        case RTI:
+            result = QString("RTI");
+            break;
+
+        default:
+                result = QString("RESERVED");
+        }
+        //qDebug() << result;
+        res = result;
+    }
     return res;
 }
 
@@ -255,9 +363,16 @@ void MainWindow::on_actionPython_Console_triggered()
     dockPy->show();
 }
 
-void MainWindow::onMemChanged(uint16_t address, uint16_t newVal){
-    QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
-    mItem->setText("x" + QString("%1").arg(newVal,4, 16, QChar('0')));
-    //Will Do translation here too
-}
+//void MainWindow::onMemChanged(uint16_t address, uint16_t newVal){
+//    QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
+//    QString instText = "x" + QString("%1").arg(newVal,4, 16, QChar('0'));
+//    QString trannyText = GetTranslation(instText);
+//    mItem->setText(instText);
+
+//    QTableWidgetItem* mItem2 = ui->tableMem->item(address, 3); //Set the translation
+//    mItem2->setText(trannyText); //I am the whole tranny
+
+
+//    //Will Do translation here too
+//}
 

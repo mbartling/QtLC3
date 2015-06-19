@@ -43,7 +43,7 @@ private slots:
 
     void on_actionHelp_Me_triggered();
     void on_actionPython_Console_triggered();
-    void onMemChanged(uint16_t, uint16_t);
+    //void onMemChanged(uint16_t, uint16_t);
 
 private:
     Ui::MainWindow *ui;

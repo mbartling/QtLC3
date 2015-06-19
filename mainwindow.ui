@@ -65932,7 +65932,6 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
-    <addaction name="actionOptions"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuSimulator">
