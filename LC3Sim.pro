@@ -37,3 +37,4 @@ HEADERS += *.h \
         *.hpp
 
 FORMS += *.ui
+RESOURCES = qdarkstyle/style.qrc
