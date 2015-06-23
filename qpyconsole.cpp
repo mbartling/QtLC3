@@ -184,8 +184,13 @@ QPyConsole *QPyConsole::getInstance(QWidget *parent, const QString& welcomeText)
 QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
         QConsole(parent, welcomeText),lines(0)
 {
+    //Manually set the colors for python
+    setCmdColor(QColor(230, 230, 230));
+    setOutColor(QColor(230, 230, 230));
+    setCompletionColor(QColor(230, 230, 230));
     //set the Python Prompt
     setNormalPrompt(true);
+
 
     Py_Initialize();
     /* NOTE: In previous implementaion, local name and global name
