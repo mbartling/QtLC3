@@ -34,9 +34,12 @@
      <widget class="QTreeView" name="helpFileTree">
       <property name="minimumSize">
        <size>
-        <width>272</width>
+        <width>50</width>
         <height>0</height>
        </size>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
       </property>
       <property name="indentation">
        <number>10</number>
@@ -47,11 +50,23 @@
       <property name="animated">
        <bool>true</bool>
       </property>
+      <property name="headerHidden">
+       <bool>false</bool>
+      </property>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
       <attribute name="headerCascadingSectionResizes">
        <bool>true</bool>
       </attribute>
+      <attribute name="headerDefaultSectionSize">
+       <number>103</number>
+      </attribute>
       <attribute name="headerMinimumSectionSize">
-       <number>30</number>
+       <number>10</number>
+      </attribute>
+      <attribute name="headerStretchLastSection">
+       <bool>true</bool>
       </attribute>
      </widget>
     </item>

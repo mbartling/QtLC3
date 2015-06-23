@@ -363,16 +363,5 @@ void MainWindow::on_actionPython_Console_triggered()
     dockPy->show();
 }
 
-//void MainWindow::onMemChanged(uint16_t address, uint16_t newVal){
-//    QTableWidgetItem* mItem = ui->tableMem->item(address, 2); //Get the data
-//    QString instText = "x" + QString("%1").arg(newVal,4, 16, QChar('0'));
-//    QString trannyText = GetTranslation(instText);
-//    mItem->setText(instText);
 
-//    QTableWidgetItem* mItem2 = ui->tableMem->item(address, 3); //Set the translation
-//    mItem2->setText(trannyText); //I am the whole tranny
-
-
-//    //Will Do translation here too
-//}
 

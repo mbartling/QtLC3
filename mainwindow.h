@@ -43,7 +43,6 @@ private slots:
 
     void on_actionHelp_Me_triggered();
     void on_actionPython_Console_triggered();
-    //void onMemChanged(uint16_t, uint16_t);
 
 private:
     Ui::MainWindow *ui;
@@ -53,11 +52,7 @@ private:
     simulator* mSim;
     std::function<void (void)> updateRegs;
     std::vector<std::string> fileVec; //Maintain a list of loaded files
-    //    enum {numRegs = 8};
-//    QGroupBox *gridGroupBox;
-//    QLabel *regLabels[numRegs];
-//    QLineEdit *regLines[numRegs];
-//    QListWidget *ListMemory;
+
 };
 
 #endif // MAINWINDOW_H
