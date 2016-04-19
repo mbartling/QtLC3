@@ -36,4 +36,10 @@ void lc3Console::on_consoleLineEdit_returnPressed()
 void lc3Console::setSimulator(simulator* sim){
     mSim = sim;
     //Link the Display register callback
+    mSim->addWatchPoint(0xFE06,false, true,[this](uint16_t addr, uint16_t oldval, uint16_t newVal){
+        mSim->memWrite(0xFE04, (uint16_t) 0x0000); //Clear the status register
+        char c = (char) mSim->memory[0xFE06];
+        ui->mlc3Display->appendPlainText(c);
+        mSim->memWrite(0xFE04, (uint16_t) 0x8000); //Set the status register
+    });
 }

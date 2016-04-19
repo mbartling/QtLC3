@@ -19,6 +19,13 @@ unix {
   INCLUDEPATH += "/usr/include/python2.7/"
   #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
   LIBS += -lpython2.7 -lutil -lboost_python -lboost_system
+  EXTRA_BINFILES += \
+    pylc3.so \
+    lc3os.obj
+  for(FILE,EXTRA_BINFILES){
+    system(cp $${FILE} $${OUT_PWD})
+  }
+  system(cp -rf help $${OUT_PWD})
 }
 
 #SOURCES += main.cpp\

@@ -149,6 +149,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mSim->loadBinFile(fname);
     int rowId = ((int) mSim->getPC() & 0xFFFF);
     ui->tableMem->setCurrentCell(rowId, 1);
+    mSim->run();
 
 }
 
