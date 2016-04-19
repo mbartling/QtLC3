@@ -1,0 +1,20 @@
+
+LICENSE
+
+A new and improved LC-3 simulator and GUI for the LC-3 ISA
+    Copyright (C) 2016  Michael Bartling and Jimmy Brisson
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+The LC-3 OS is property of Steven S. Copyright (c) 2003 Steven S. Lumetta.\n\nThe LC-3 OS is free software covered by the GNU General\nPublic License, and you are welcome to modify it and/or distribute copies\nof it under certain conditions.  The file COPYING (distributed with the\ntools) specifies those conditions.  There is absolutely no warranty for\nthe LC-3 tools distribution, as described in the file NO_WARRANTY (also\ndistributed with the tools).\n\nHave fun.\n

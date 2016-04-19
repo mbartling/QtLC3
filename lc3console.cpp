@@ -1,5 +1,6 @@
 #include "lc3console.h"
 #include "ui_lc3console.h"
+#include <QDebug>
 
 lc3Console::lc3Console(QWidget *parent) :
     QWidget(parent),
@@ -39,7 +40,11 @@ void lc3Console::setSimulator(simulator* sim){
     mSim->addWatchPoint(0xFE06,false, true,[this](uint16_t addr, uint16_t oldval, uint16_t newVal){
         mSim->memWrite(0xFE04, (uint16_t) 0x0000); //Clear the status register
         char c = (char) mSim->memory[0xFE06];
-        ui->mlc3Display->appendPlainText(c);
+//        ui->mlc3Display->appendPlainText(QString(c));
+        ui->mlc3Display->moveCursor(QTextCursor::End);
+        ui->mlc3Display->insertPlainText(QString(c));
+        ui->mlc3Display->moveCursor(QTextCursor::End);
+
         mSim->memWrite(0xFE04, (uint16_t) 0x8000); //Set the status register
     });
 }

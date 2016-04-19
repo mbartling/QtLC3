@@ -17,15 +17,20 @@ QT += widgets
 DEFINES += USE_POPUP_COMPLETER
 unix {
   INCLUDEPATH += "/usr/include/python2.7/"
+  INCLUDEPATH += "pylc3/inc/"
+  SOURCES += "pylc3/src/simulator.cpp"
+
   #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
   LIBS += -lpython2.7 -lutil -lboost_python -lboost_system
+
+  #copy over some other important files
   EXTRA_BINFILES += \
     pylc3.so \
     lc3os.obj
   for(FILE,EXTRA_BINFILES){
-    system(cp $${FILE} $${OUT_PWD})
+    system(cp $${PWD}/$${FILE} $${OUT_PWD})
   }
-  system(cp -rf help $${OUT_PWD})
+  system(cp -rf $${PWD}/help $${OUT_PWD})
 }
 
 #SOURCES += main.cpp\

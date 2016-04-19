@@ -1,0 +1,3 @@
+[submodule "pylc3"]
+	path = pylc3
+	url = git@github.com:theotherjimmy/pylc3.git

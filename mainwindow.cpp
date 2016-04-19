@@ -145,11 +145,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Finally, load the default LC3os
     std::string fname = "lc3os.obj";
-    fileVec.push_back(fname);
+    //fileVec.push_back(fname); //OS is only loaded once
     mSim->loadBinFile(fname);
     int rowId = ((int) mSim->getPC() & 0xFFFF);
     ui->tableMem->setCurrentCell(rowId, 1);
-    mSim->run();
+    mSim->setPC(0x0200); //Run the OS
+//    mSim->run();
 
 }
 
