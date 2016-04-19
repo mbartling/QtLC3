@@ -44,6 +44,8 @@ private slots:
     void on_actionHelp_Me_triggered();
     void on_actionPython_Console_triggered();
 
+    void on_tableMem_cellDoubleClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
     HelpSystem *helpSystem;

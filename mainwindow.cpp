@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
         mItem2->setText(trannyText); //I am the whole tranny
     } );
 
+    // Lambda function fo updating the text
     updateRegs = [this](){
             ui->tableMem->setCurrentCell(mSim->getPC(), 1);
             ui->lineR8->setText(uint16_t2lc3str(mSim->getPC()));
@@ -142,6 +143,12 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     updateRegs();
 
+    //Finally, load the default LC3os
+    std::string fname = "lc3os.obj";
+    fileVec.push_back(fname);
+    mSim->loadBinFile(fname);
+    int rowId = ((int) mSim->getPC() & 0xFFFF);
+    ui->tableMem->setCurrentCell(rowId, 1);
 
 }
 
@@ -367,3 +374,8 @@ void MainWindow::on_actionPython_Console_triggered()
 
 
 
+
+void MainWindow::on_tableMem_cellDoubleClicked(int row, int column)
+{
+
+}

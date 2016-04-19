@@ -35,4 +35,5 @@ void lc3Console::on_consoleLineEdit_returnPressed()
 
 void lc3Console::setSimulator(simulator* sim){
     mSim = sim;
+    //Link the Display register callback
 }
