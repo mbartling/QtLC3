@@ -17,7 +17,7 @@ QT += widgets
 DEFINES += USE_POPUP_COMPLETER
 unix {
   INCLUDEPATH += "/usr/include/python2.7/"
-  INCLUDEPATH += "pylc3/inc/" "inc/"
+  INCLUDEPATH += "pylc3/inc/" "inc/" "/usr/include/pylc3"
 #  SOURCES += "pylc3/src/simulator.cpp"
 
   #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
