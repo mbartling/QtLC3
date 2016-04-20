@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Create the python console
     QMainWindow* pymw = new QMainWindow(this);
     pymw->setMinimumSize(640, 480);
-    QPyConsole *pyConsole = QPyConsole::getInstance(pymw, "NOTE: DO NOT create a new sim object\n \
-    Please use 'pylc3.sim' as you simulator object");
+    pyConsole = QPyConsole::getInstance(pymw, "NOTE: DO NOT create a new sim object\n \
+    Please use 'pylc3.sim' as you simulator object\n\nThere is a known bug with the python console, where long lines get truncated and the script doesn't run.\n\
+    First person to fix this gets a cookie :)");
     pymw->setFocusProxy((QWidget*)pyConsole);
     pymw->setCentralWidget((QWidget*)pyConsole);
 
@@ -379,5 +380,25 @@ void MainWindow::on_actionPython_Console_triggered()
 
 void MainWindow::on_tableMem_cellDoubleClicked(int row, int column)
 {
+    if(column == 0){
+        if(!ui->tableMem->item(row,column))
+            ui->tableMem->setItem(row,column, new QTableWidgetItem);
+//        ui->tableMem->item(row,column)->setBackgroundColor(Qt::red);
+        if(ui->tableMem->item(row,column)->text() == "B"){ //Remove the Breakpoint
+            ui->tableMem->item(row,column)->setText("");
+            mSim->removeBreakPoint(row);
+        }else{
+            ui->tableMem->item(row,column)->setText("B"); //Add the breakpoint
+            mSim->addBreakPoint(row,[](uint16_t x){qDebug() << "INSIDE A BREAKPOINT " << x;}); //The worlds most beautiful lambda function
+        }
 
+    }
+}
+
+void MainWindow::on_actionOpen_Python_Script_triggered()
+{
+    QString filename;
+    filename = QFileDialog::getOpenFileName(this, tr("Open Program"), QDir::currentPath(), tr("Object Files (*.obj);;All files (*.*)"));
+//    std::string fname = filename.toLatin1().constData();
+    pyConsole->loadScript(filename);
 }

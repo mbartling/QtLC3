@@ -532,7 +532,9 @@ QString QConsole::getCurrentCommand()
 		QTextCursor cursor = textCursor();    //Get the current command: we just remove the prompt
 		cursor.movePosition(QTextCursor::StartOfLine);
 		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, promptLength);
-		cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+//        cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+
 		QString command = cursor.selectedText();
 		cursor.clearSelection();
 		return command;
@@ -544,7 +546,9 @@ void QConsole::replaceCurrentCommand(const QString &newCommand)
 		QTextCursor cursor = textCursor();
 		cursor.movePosition(QTextCursor::StartOfLine);
 		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, promptLength);
-		cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+//        cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+
 		cursor.insertText(newCommand);
 }
 

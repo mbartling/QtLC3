@@ -9,6 +9,8 @@
 #include "helpsystem.h"
 #include "simulator.hpp"
 #include <vector>
+#include "qpyconsole.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -46,6 +48,8 @@ private slots:
 
     void on_tableMem_cellDoubleClicked(int row, int column);
 
+    void on_actionOpen_Python_Script_triggered();
+
 private:
     Ui::MainWindow *ui;
     HelpSystem *helpSystem;
@@ -54,7 +58,7 @@ private:
     simulator* mSim;
     std::function<void (void)> updateRegs;
     std::vector<std::string> fileVec; //Maintain a list of loaded files
-
+    QPyConsole *pyConsole;
 };
 
 #endif // MAINWINDOW_H

@@ -64,6 +64,7 @@ private:
 
     //The instance
     static QPyConsole *theInstance;
+    virtual bool isCommandComplete(const QString &mCmd);
 
 private:
     // function to check if current command compiled and if not hinted for a multiline statement

@@ -17,11 +17,12 @@ QT += widgets
 DEFINES += USE_POPUP_COMPLETER
 unix {
   INCLUDEPATH += "/usr/include/python2.7/"
-  INCLUDEPATH += "pylc3/inc/"
-  SOURCES += "pylc3/src/simulator.cpp"
+  INCLUDEPATH += "pylc3/inc/" "inc/"
+#  SOURCES += "pylc3/src/simulator.cpp"
 
   #LIBS += -L"$(PYTHON_PATH)/lib/python$(PYTHON_VERSION)/config" -lutil
-  LIBS += -lpython2.7 -lutil -lboost_python -lboost_system
+#  LIBS += -L/usr/lib/python2.7/dist-packages/
+  LIBS += -lpython2.7 -lutil -lboost_python -lboost_system -lpylc3
 
   #copy over some other important files
   EXTRA_BINFILES += \
@@ -31,22 +32,13 @@ unix {
     system(cp $${PWD}/$${FILE} $${OUT_PWD})
   }
   system(cp -rf $${PWD}/help $${OUT_PWD})
+
+  SOURCES += $$files(src/*.cpp)
+  HEADERS += $$files(inc/*.h) \
+              $$files(inc/*.hpp) $$files(pylc3/inc/*.h) $$files(pylc3/inc/*.hpp)
+  RESOURCES = qdarkstyle/style.qrc
 }
 
-#SOURCES += main.cpp\
-#        mainwindow.cpp \
-#    lc3sim.cpp
 
-SOURCES += *.cpp
-
-
-#HEADERS  += mainwindow.h \
-#    lc3sim.h
-
-#FORMS    += mainwindow.ui
-
-HEADERS += *.h \
-        *.hpp
 
 FORMS += *.ui
-RESOURCES = qdarkstyle/style.qrc

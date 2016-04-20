@@ -65933,6 +65933,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionExit"/>
+    <addaction name="actionOpen_Python_Script"/>
    </widget>
    <widget class="QMenu" name="menuSimulator">
     <property name="title">
@@ -65991,6 +65992,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionOptions">
@@ -66063,7 +66067,7 @@
   </action>
   <action name="actionPython_Console">
    <property name="text">
-    <string>Python Console</string>
+    <string>Python Console (experimental)</string>
    </property>
    <property name="shortcut">
     <string>F2</string>
@@ -66075,6 +66079,17 @@
    </property>
    <property name="toolTip">
     <string>Go to a line</string>
+   </property>
+  </action>
+  <action name="actionOpen_Python_Script">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Open Python Script</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

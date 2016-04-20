@@ -391,6 +391,11 @@ QStringList QPyConsole::suggestCommand(const QString &cmd, QString& prefix)
     return list;
 }
 
+bool QPyConsole::isCommandComplete(const QString &mCmd)
+{
+//    if(mCmd.endsWith('\\')) return false;
+    return true;
+}
 object& QPyConsole::getMainNamespace(){
     return *main_namespace;
 }
