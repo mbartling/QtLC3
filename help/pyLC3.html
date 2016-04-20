@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+    <body>
+          <h1 >simulator()</h1>
+
+<p >Normally, the simulator object can be created in python with:</p>
+<pre ><code >import pylc3
+sim = pylc3.simulator()
+</code></pre>
+<p ><b>NOTE:</b> The GUI already provides a simulator object. The following code snippet shows how to access the GUI provided simulator from the python console.</p>
+<pre ><code >pylc3.sim
+pylc3.sim.run()
+</code></pre>
+<h1 ><a id="user-content-stepnn" class="anchor" ></a>stepN(n)</h1>
+<p >stepN steps the simulated LC3 processor by n instructions including instructions taken by interrupt service routines and calls to functions. For example running the LC3 for 10 instructions starting at PC = 0x3000 would go like:</p>
+<pre ><code >pylc3.sim.setPC(0x3000)
+pylc3.sim.stepN(10)
+</code></pre>
+<h1 ><a id="user-content-nextnn" class="anchor" ></a>nextN(n)</h1>
+<p >nextN steps the simulated LC3 processor by n instructions excluding instructions taken by interrupt service routines and calls to functions. For example running the LC3 for 15 instructions starting at PC = 0x4000 would go like:</p>
+<pre ><code >pylc3.sim.setPC(0x4000)
+pylc3.sim.nextN(15)
+</code></pre>
+<h1 ><a id="user-content-doinstinst" class="anchor" ></a>doInst(inst)</h1>
+<p >+internal-ish+ doInst does the instruction proveded as the first parameter. for example, a no-op:</p>
+<pre ><code >pylc3.sim.doInst(0x0000)
+</code></pre>
+<h1 ><a id="user-content-mem" class="anchor" ></a>mem</h1>
+<p >Memory is provided as an array in the mem attribute of all simulator objects, and can be sliced like a python array. for example reading the contents of memory location 0x1000, and setting it to 4:</p>
+<pre ><code >oldval = pylc3.sim.mem[0x1000]
+pylc3.sim.mem[0x1000] = 4
+</code></pre>
+<h1 ><a id="user-content-getregreg-and-setregreg-val" class="anchor" ></a>getReg(reg) and setReg(reg, val)</h1>
+<p >getReg and setReg get and set general purpose register in the simulated LC3. e.g.:</p>
+<pre ><code >oldReg = pylc3.sim.getReg(5)
+pylc3.sim.setReg(0,oldReg)
+</code></pre>
+<h1 ><a id="user-content-getpcsrbitbit-and-setpcsrbitbit-val" class="anchor" ></a>getPcsrBit(bit) and setPcsrBit(bit, val)</h1>
+<p >getPcsrBit and setPcsrBit get and set the bits of the LC3's program status register. The availible bits at this time are:</p>
+<ul>
+<li><span >&nbsp;s - supervisor mode</span></li>
+<li><span >n - negative condition code</span></li>
+<li><span >z - zero condition code</span></li>
+<li><span >p - positive condition code</span></li>
+</ul>
+<p >NOTE: it is possible to put the processor into an invalid state with the use of this function; for example you can set all three of n, z, and p. As an example use of this API, the code below sets the n bit and clears the z bit if the z bit is set:</p>
+<pre ><code >if pylc3.sim.getPcsrBit('z') :
+    pylc3.sim.setPcsrBit('z', False)
+    pylc3.sim.setPcsrBit('n', True)
+</code></pre>
+<h1 ><a id="user-content-addwatchpointaddress-triggeronread-triggeronwrite-callback_fn" class="anchor" ></a>addWatchPoint(address, triggerOnRead, triggerOnWrite, callback_fn)</h1>
+<p >addWatchPoint adds a watch point to the simulator. Watchpoints in this LC3 simulator are setup for batch testing or programming and call a function when the program accesses a particular memory location, including for fetching instructions. This function acts as if it had been declared as follows in python:</p>
+<pre ><code >class simulator:
+...
+
+def addWatchPoint(address, readP, writeP, callback):
+    ...
+</code></pre>
+<p >The readP and writeP boolean values that tell the simulator to call the callback on a read or a write respectively. Both readP and writeP may be set. For example, we run the function&nbsp;<code >watch1</code>&nbsp;when the program writes to the memory location 0x4000 and the function&nbsp;<code >watch2</code>&nbsp;when the program reads from the memory location 0x5000:</p>
+<pre ><code >def watch1(address, oldval, newval) :
+    print("wachpoint 1: {:x}: {} -&gt; {}".format(adderss
+    , oldval
+    , newval))
+
+def watch2(address, oldval, newval) :
+    print("wachpoint 2: {:x}: {} -&gt; {}".format(adderss
+    , oldval
+    , newval))
+
+pylc3.sim.addWatchPoint(0x4000, False, True, watch1)
+pylc3.sim.addWatchPoint(0x5000, True, False, watch2)
+</code></pre>
+<h1 ><a id="user-content-addbreakpointaddress-callback_fn" class="anchor" ></a>addBreakPoint(address, callback_fn)</h1>
+<p >addBreakPoint adds a watch point to the simulator. Breakpoints in this LC3 simulator are setup for batch testing or programming and call a function when the program fetches a particular memory location. For example, if we wanted to run the function&nbsp;<code >break1</code>&nbsp;when the program reaches 0x3010:</p>
+<pre ><code >def break1(address) :
+    print("program reached {}", address)
+
+pylc3.sim.addBreakPoint(0x3010, break1)
+</code></pre>
+<h1 ><a id="user-content-loadprogram" class="anchor" ></a>load(program)</h1>
+<p >load a program in the LC3 object file format from disk and load it into memory. Does not cause watchpoints to trigger. e.g. loading the program&nbsp;<code >iggy</code>:</p>
+<pre ><code >pylc3.sim.load("iggy.out")
+</code></pre>
+<h1 ><a id="user-content-run" class="anchor" ></a>run()</h1>
+<p >Run program until completion</p>
+<h1 ><a id="user-content-refreshgui" class="anchor" ></a>refreshGUI()</h1>
+<p >Call this function when using the gui after modifying memory to refresh the memory view for example:</p>
+<pre ><code >pylc3.sim.mem[0x3000:0x4000] = range(0x1000)
+pylc3.sim.refreshGUI()
+</code></pre>
+<h1 ><a id="user-content-getpc-and-setpcaddress" class="anchor" ></a>getPC() and setPC(address)</h1>
+<p >getPC or setPC get or set the simulated LC3's progam counter example usage:</p>
+<pre ><code >oldpc = pylc3.sim.getPC()
+pylc3.sim.setPC(0x3000)
+</code></pre>
+<h1 ><a id="user-content-addinterrupttriggerintvector-priority-callback_fn" class="anchor" ></a>addInterruptTrigger(IntVector, priority, callback_fn)</h1>
+<p >Interrupts in this LC3 simulator are generated by callbacks that execute every instruction and return a boolean indicating wheather either an interrupt should be triggered or not. Once an interrupt is triggered, the function triggering the interrupt will not be called again until the interrupt has been serviced by the processor. Example: suppose we want to trigger interrupt 0x85 with the python function&nbsp;<code >interrupt1</code>&nbsp;with the priority 4:</p>
+<pre ><code >counter = 0
+def interrupt1 ():
+    counter += 1
+    if counter == 400:
+        counter = 0
+        return True
+    return False
+
+pylc3.sim.addInterruptTrigger(0x85, 4, interrupt1)
+</code></pre>
+<h1 ><a id="user-content-getpriority-and-setprioritypriority" class="anchor" ></a>getPriority() and setPriority(priority)</h1>
+<p >getPriority and setPriority get and set the interal priority that the simulated LC3 is running at. for example to set the proirity to 0:</p>
+<pre ><code >oldpriority = pylc3.sim.getPriority()
+pylc3.sim.setPriority(0)</code></pre>
+
+  </body>
+  </html>
