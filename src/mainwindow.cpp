@@ -7,8 +7,6 @@
 #include "qpyconsole.h"
 #include "lc3console.h"
 #include <boost/python.hpp>
-#include "pythonInterface/pyInterface.cpp"
-#include "simulator-internals.hpp"
 #include <string>
 
 QString int2lc3str(int num);

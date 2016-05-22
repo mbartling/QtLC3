@@ -8,6 +8,9 @@
 #include <QLabel>
 #include "helpsystem.h"
 #include "simulator.hpp"
+#include "pyInterface.hpp"
+#include "simulator-internals.hpp"
+
 #include <vector>
 #include "qpyconsole.h"
 
