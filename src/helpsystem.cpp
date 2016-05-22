@@ -1,5 +1,6 @@
 #include "helpsystem.h"
 #include "ui_helpsystem.h"
+#include "../inc/moc_helpsystem.cpp"
 #include <QDebug>
 HelpSystem::HelpSystem(QWidget *parent) :
     QDockWidget(parent),

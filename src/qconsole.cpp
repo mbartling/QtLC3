@@ -18,6 +18,8 @@
  ***************************************************************************/
 
 #include "qconsole.h"
+#include "../inc/moc_qconsole.cpp"
+#include "../inc/moc_qpyconsole.cpp"
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>

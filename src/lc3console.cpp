@@ -1,5 +1,6 @@
 #include "lc3console.h"
 #include "ui_lc3console.h"
+#include "../inc/moc_lc3console.cpp"
 #include <QDebug>
 
 lc3Console::lc3Console(QWidget *parent) :

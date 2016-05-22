@@ -35,14 +35,13 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core
 
 # file(GLOB SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.cpp pylc3/src/*.cpp)
 # file(GLOB SOURCES src/*.cpp inc/*.h pylc3/src/*.cpp pylc3/inc/*.hpp)
-file(GLOB SOURCES src/*.cpp)
-set(SOURCES ${SOURCES} pylc3/src/simulator.cpp)
+set(SOURCES ${SOURCES} src/qconsole.cpp src/mainwindow.cpp src/helpsystem.cpp src/lc3console.cpp src/main.cpp pylc3/src/simulator.cpp)
 # file(GLOB PYLC3SOURCES pylc3/src/*.cpp)
 
 message(STATUS "SOURCES: " ${SOURCES})
 # add_subdirectory(pylc3)
 
-add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc)
+add_executable(qltc3 qdarkstyle/style.qrc ${SOURCES})
 
 # target_compile_features(qtlc3 PRIVATE cxx_range_for)
 include(CheckCXXCompilerFlag)
