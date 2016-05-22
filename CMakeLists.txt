@@ -23,6 +23,8 @@ find_package(PythonLibs 2.7 REQUIRED)
 include_directories(${QT_INCLUDES}) 
 include_directories(${PYTHON_INCLUDE_DIRS})
 
+set(Boost_USE_STATIC_LIBS ON)
+
 find_package(Boost)
 find_package(Boost COMPONENTS python REQUIRED)
 
