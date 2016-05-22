@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>lc3Console</class>
+ <widget class="QWidget" name="lc3Console">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>437</width>
+    <height>312</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" columnstretch="10,2">
+   <item row="0" column="0">
+    <widget class="QPlainTextEdit" name="mlc3Display">
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLineEdit" name="consoleLineEdit">
+     <property name="maxLength">
+      <number>1000</number>
+     </property>
+     <property name="placeholderText">
+      <string>Input</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPlainTextEdit" name="lc3History">
+     <property name="toolTip">
+      <string>History</string>
+     </property>
+     <property name="whatsThis">
+      <string>History</string>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="documentTitle">
+      <string>History</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
