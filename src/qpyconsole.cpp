@@ -31,6 +31,7 @@
 #endif
 #include <Python.h>
 #include "qpyconsole.h"
+#include "../inc/moc_qpyconsole.cpp"
 #include <boost/python.hpp>
 #include <QDebug>
 

@@ -35,7 +35,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core
 
 # file(GLOB SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.cpp pylc3/src/*.cpp)
 # file(GLOB SOURCES src/*.cpp inc/*.h pylc3/src/*.cpp pylc3/inc/*.hpp)
-set(SOURCES ${SOURCES} src/qconsole.cpp src/mainwindow.cpp src/helpsystem.cpp src/lc3console.cpp src/main.cpp pylc3/src/simulator.cpp)
+set(SOURCES ${SOURCES} src/qpyconsole.cpp src/qconsole.cpp src/mainwindow.cpp src/helpsystem.cpp src/lc3console.cpp src/main.cpp pylc3/src/simulator.cpp)
 # file(GLOB PYLC3SOURCES pylc3/src/*.cpp)
 
 message(STATUS "SOURCES: " ${SOURCES})
