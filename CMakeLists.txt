@@ -58,7 +58,9 @@ endif()
 add_executable(qtlc3 WIN32 ${SOURCES} qdarkstyle/style.qrc)
 
 # Use the Widgets module from Qt 5.
-target_link_libraries(qtlc3 Qt5::Widgets)
+target_link_libraries(qtlc3 Qt5::Widgets
+  ${Boost_LIBRARIES}
+  ${PYTHON_LIBRARIES})
 # target_link_libraries(qtlc3 Qt5::Gui)
 # target_link_libraries(qtlc3 Qt5::Core)
 # target_link_libraries(qtlc3 ${Qt5Widgets_LIBRARIES})
