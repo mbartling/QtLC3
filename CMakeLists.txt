@@ -41,8 +41,6 @@ set(SOURCES ${SOURCES} src/qpyconsole.cpp src/qconsole.cpp src/mainwindow.cpp sr
 message(STATUS "SOURCES: " ${SOURCES})
 # add_subdirectory(pylc3)
 
-add_executable(qltc3 qdarkstyle/style.qrc ${SOURCES})
-
 # target_compile_features(qtlc3 PRIVATE cxx_range_for)
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
