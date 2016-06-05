@@ -9,6 +9,7 @@
 #include "lc3console.h"
 #include <boost/python.hpp>
 #include <string>
+#include "pylc3/inc/pyInterface.hpp"
 
 QString int2lc3str(int num);
 QString uint16_t2lc3str(uint16_t);
@@ -118,6 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add the simulator to the console
     mConsole->setSimulator(mSim);
     try{
+        initpylc3();
         object main_namespace = pyConsole->getMainNamespace();
         object simulator_module((handle<>(PyImport_ImportModule("pylc3"))));
 
