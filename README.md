@@ -1,8 +1,10 @@
 # QtLC3
-A better LC3 Simulator written in Qt
+A better LC3 Simulator written in Qt5
 
 # Build Instructions
-    qmake
+    mkdir build
+    cd build
+    cmake ..
     make
 # Additional Information
 
