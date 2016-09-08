@@ -9,4 +9,7 @@ python: 2.7.12
 before_install:
 - echo $LANG
 - echo $LC_ALL
+before_script:
+- sudo apt-get update
+- sudo apt-get install qtbase5-dev
 script: cmake . && make
