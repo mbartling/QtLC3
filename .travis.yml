@@ -12,4 +12,5 @@ before_install:
 before_script:
 - sudo apt-get update
 - sudo apt-get install qtbase5-dev
+- sudo apt-get install libboost-dev
 script: cmake . && make
