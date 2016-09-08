@@ -9,4 +9,4 @@ python: 2.7.12
 before_install:
 - echo $LANG
 - echo $LC_ALL
-script: cmake 
+script: cmake . && make
