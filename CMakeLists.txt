@@ -14,15 +14,18 @@ set(CMAKE_AUTORCC ON)
 
 
 # Find the QtWidgets library
-find_package(Qt5Widgets)
-find_package(Qt5Core)
-find_package(Qt5Gui)
-# find_package(Qt5Widgets REQUIRED)
+#if(APPLE)
+#include_directories(/usr/local/opt/qt5/include)
+#link_directories(/usr/local/opt/qt5/lib)
+#add_definitions(-DPREFIX="${DESTDIR}")
+#endif()
+
 
 find_package(PythonLibs 2.7 REQUIRED)
-include_directories(${QT_INCLUDES}) 
 include_directories(${PYTHON_INCLUDE_DIRS})
+find_package(PythonInterp)
 
+include_directories(${QT_INCLUDES}) 
 find_package(Boost)
 find_package(Boost COMPONENTS python REQUIRED)
 
@@ -30,6 +33,10 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 include_directories(${PROJECT_SOURCE_DIR}/pylc3/inc)
 
+find_package(Qt5Widgets)
+find_package(Qt5Core)
+find_package(Qt5Gui)
+# find_package(Qt5Widgets REQUIRED)
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core_INCLUDE_DIRS} ${Qt5Core_LIBRARIES})
 
@@ -41,7 +48,7 @@ file(GLOB SOURCES src/*.cpp pylc3/src/*.cpp)
 message(STATUS "SOURCES: " ${SOURCES})
 # add_subdirectory(pylc3)
 
-add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc)
+add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc) 
 
 # target_compile_features(qtlc3 PRIVATE cxx_range_for)
 include(CheckCXXCompilerFlag)
@@ -65,8 +72,8 @@ target_link_libraries(qtlc3 Qt5::Widgets)
 # target_compile_definitions(qtlc3 PRIVATE PREFIX="${DESTDIR}")
 add_definitions(-DPREFIX="${DESTDIR}")
 
-# target_link_libraries(qtlc3 pylc3)
+#target_link_libraries(qtlc3 pylc3)
 
-# target_include_directories(qtlc3 INTERFACE
-#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-#   $<INSTALL_INTERFACE:include/pylc3>)
+#target_include_directories(qtlc3 INTERFACE
+#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+#  $<INSTALL_INTERFACE:include/pylc3>)
