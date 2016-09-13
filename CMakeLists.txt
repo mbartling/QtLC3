@@ -42,13 +42,13 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core
 
 # file(GLOB SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.cpp pylc3/src/*.cpp)
 # file(GLOB SOURCES src/*.cpp inc/*.h pylc3/src/*.cpp pylc3/inc/*.hpp)
-file(GLOB SOURCES src/*.cpp pylc3/src/*.cpp)
+#file(GLOB SOURCES src/*.cpp pylc3/src/*.cpp)
+file(GLOB SOURCES src/*.cpp)
 # file(GLOB PYLC3SOURCES pylc3/src/*.cpp)
 
 message(STATUS "SOURCES: " ${SOURCES})
-# add_subdirectory(pylc3)
+add_subdirectory(pylc3)
 
-add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc) 
 
 # target_compile_features(qtlc3 PRIVATE cxx_range_for)
 include(CheckCXXCompilerFlag)
@@ -62,6 +62,7 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 # Tell CMake to create the qltc3 executable
+add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc) 
 add_executable(qtlc3 WIN32 ${SOURCES} qdarkstyle/style.qrc)
 
 # Use the Widgets module from Qt 5.
@@ -72,7 +73,7 @@ target_link_libraries(qtlc3 Qt5::Widgets)
 # target_compile_definitions(qtlc3 PRIVATE PREFIX="${DESTDIR}")
 add_definitions(-DPREFIX="${DESTDIR}")
 
-#target_link_libraries(qtlc3 pylc3)
+target_link_libraries(qtlc3 libpylc3)
 
 #target_include_directories(qtlc3 INTERFACE
 #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
