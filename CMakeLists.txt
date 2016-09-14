@@ -8,34 +8,28 @@ set(CMAKE_CXX_FLAGS "-fPIC")
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-
-# Find the QtWidgets library
-#if(APPLE)
-#include_directories(/usr/local/opt/qt5/include)
-#link_directories(/usr/local/opt/qt5/lib)
-#add_definitions(-DPREFIX="${DESTDIR}")
-#endif()
+set(AUTOMOC_MOC_OPTIONS "-Iinc")
 
 
 find_package(PythonLibs 2.7 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
-find_package(PythonInterp)
+find_package(PythonInterp REQUIRED)
 
 include_directories(${QT_INCLUDES}) 
-find_package(Boost)
+find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS python REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 include_directories(${PROJECT_SOURCE_DIR}/pylc3/inc)
 
-find_package(Qt5Widgets)
-find_package(Qt5Core)
-find_package(Qt5Gui)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
 # find_package(Qt5Widgets REQUIRED)
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core_INCLUDE_DIRS} ${Qt5Core_LIBRARIES})
@@ -44,7 +38,12 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Widgets_LIBRARIES} ${Qt5Core
 # file(GLOB SOURCES src/*.cpp inc/*.h pylc3/src/*.cpp pylc3/inc/*.hpp)
 #file(GLOB SOURCES src/*.cpp pylc3/src/*.cpp)
 file(GLOB SOURCES src/*.cpp)
+file(GLOB UI_FILES src/*.ui)
+
 # file(GLOB PYLC3SOURCES pylc3/src/*.cpp)
+
+qt5_wrap_cpp(qt5_src inc/helpsystem.h inc/lc3console.h inc/mainwindow.h inc/qconsole.h)
+qt5_wrap_ui(qt5_ui ${UI_FILES})
 
 message(STATUS "SOURCES: " ${SOURCES})
 add_subdirectory(pylc3)
@@ -62,18 +61,20 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 # Tell CMake to create the qltc3 executable
-add_executable(qltc3 ${SOURCES} qdarkstyle/style.qrc) 
-add_executable(qtlc3 WIN32 ${SOURCES} qdarkstyle/style.qrc)
+add_executable(qltc3 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc) 
+add_executable(qtlc3 WIN32 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc)
 
-# Use the Widgets module from Qt 5.
-target_link_libraries(qtlc3 Qt5::Widgets)
-# target_link_libraries(qtlc3 Qt5::Gui)
-# target_link_libraries(qtlc3 Qt5::Core)
-# target_link_libraries(qtlc3 ${Qt5Widgets_LIBRARIES})
-# target_compile_definitions(qtlc3 PRIVATE PREFIX="${DESTDIR}")
 add_definitions(-DPREFIX="${DESTDIR}")
 
 target_link_libraries(qtlc3 libpylc3)
+target_link_libraries(qtlc3 ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+
+# Use the Widgets module from Qt 5.
+target_link_libraries(qtlc3 Qt5::Widgets)
+#target_link_libraries(qtlc3 Qt5::Gui)
+#target_link_libraries(qtlc3 Qt5::Core)
+#target_link_libraries(qtlc3 ${QT5_LIBRARIES})
+# target_compile_definitions(qtlc3 PRIVATE PREFIX="${DESTDIR}")
 
 #target_include_directories(qtlc3 INTERFACE
 #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
