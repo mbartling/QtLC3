@@ -61,8 +61,11 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 # Tell CMake to create the qltc3 executable
-add_executable(qltc3 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc) 
-add_executable(qtlc3 WIN32 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc)
+#if(WIN32)
+    add_executable(qtlc3 WIN32 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc)
+#else(WIN32)
+#    add_executable(qltc3 ${SOURCES} ${qt5_src} ${qt5_ui} qdarkstyle/style.qrc) 
+#endif(WIN32)
 
 add_definitions(-DPREFIX="${DESTDIR}")
 
