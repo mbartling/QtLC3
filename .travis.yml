@@ -22,4 +22,6 @@ before_script:
   #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost --with-python        ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python               ; fi
 
-script: cmake . && make
+script: 
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake . && make                       ;fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh CMakeOSX.sh                          ;fi
