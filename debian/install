@@ -1,0 +1,5 @@
+_Linux/pylc3.so /usr/lib/python2.7/dist-packages
+qtlc3 /usr/share/QtLC3
+lc3os.obj /usr/share/QtLC3
+help/pyLC3.html /usr/share/help
+help/ISA/*.html /usr/share/help/ISA

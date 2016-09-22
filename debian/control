@@ -1,0 +1,11 @@
+Source: pylc3
+Maintainer: Michael Bartling<michael.bartling15+dev@gmail.com>
+section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9), python-all-dev, libboost-all-dev libboost-python-dev qt5-default qtbase5-dev
+
+Package: qtlc3
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: python lc3 simulator library
