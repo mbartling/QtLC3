@@ -14,6 +14,8 @@ set(CMAKE_AUTORCC ON)
 
 set(AUTOMOC_MOC_OPTIONS "-Iinc")
 
+file(COPY help DESTINATION .)
+file(COPY lc3os.obj DESTINATION .)
 
 find_package(PythonLibs 2.7 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
