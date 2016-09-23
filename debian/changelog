@@ -1,10 +1,10 @@
-PACKAGE (0.0-02) trusty; urgency=medium
+qtlc3 (0.0-02) trusty; urgency=medium
 
   * Now have a cmake style build 
 
  -- Michael <michael@wintendo>  Thu, 22 Sep 2016 20:27:58 -0500
 
-PACKAGE (0.0-01) trusty; urgency=medium
+qtlc3 (0.0-01) trusty; urgency=medium
 
   * Initial release. (Closes: #XXXXXX)
   * 

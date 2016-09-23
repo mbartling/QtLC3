@@ -143,7 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
     updateRegs();
 
     //Finally, load the default LC3os
-    std::string fname = "lc3os.obj";
+    std::string fname = QCoreApplication::applicationDirPath().toStdString() + "/lc3os.obj";
     //fileVec.push_back(fname); //OS is only loaded once
     mSim->loadBinFile(fname);
     int rowId = ((int) mSim->getPC() & 0xFFFF);

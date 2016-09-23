@@ -84,3 +84,6 @@ target_link_libraries(qtlc3 Qt5::Widgets)
 #target_include_directories(qtlc3 INTERFACE
 #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
 #  $<INSTALL_INTERFACE:include/pylc3>)
+install(TARGETS qtlc3 DESTINATION /usr/share/qtlc3)
+install(FILES lc3os.obj  DESTINATION /usr/share/qtlc3)
+install(DIRECTORY help DESTINATION /usr/share/qtlc3)
