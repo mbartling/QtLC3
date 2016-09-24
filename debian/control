@@ -3,9 +3,9 @@ Maintainer: Michael Bartling<michael.bartling15+dev@gmail.com>
 section: misc
 Priority: optional
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 9), python-all-dev, libboost-all-dev, libboost-python-dev, qt5-default, qtbase5-dev, cmake
+Build-Depends: debhelper (>= 9), python-all-dev, libboost-all-dev, libboost-python-dev, qt5-default, qtbase5-dev, cmake, cdbs
 
 Package: qtlc3
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt5-default, qtbase5-dev, python-all-dev
 Description: python lc3 simulator library

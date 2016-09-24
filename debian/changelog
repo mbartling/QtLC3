@@ -1,3 +1,87 @@
+qtlc3 (0.0-02ubuntu11) xenial; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:53:53 -0500
+
+qtlc3 (0.0-02ubuntu10) wily; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:53:15 -0500
+
+qtlc3 (0.0-02ubuntu9) precise; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:47:20 -0500
+
+qtlc3 (0.0-02ubuntu8) trusty; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:46:44 -0500
+
+qtlc3 (0.0-02ubuntu7) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:18:28 -0500
+
+qtlc3 (0.0-02ubuntu6) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 17:04:34 -0500
+
+qtlc3 (0.0-02ubuntu5) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 16:38:53 -0500
+
+qtlc3 (0.0-02ubuntu4) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 16:15:23 -0500
+
+qtlc3 (0.0-02ubuntu3) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 16:05:22 -0500
+
+qtlc3 (0.0-02ubuntu2) trusty; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 14:59:36 -0500
+
+qtlc3 (0.0-02trusty2) trusty; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 14:40:41 -0500
+
+qtlc3 (0.0-02precise2) precise; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 14:40:41 -0500
+
+qtlc3 (0.0-02vivid2) vivid; urgency=medium
+
+  * 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 14:40:41 -0500
+
+qtlc3 (0.0-02ubuntu1) trusty; urgency=medium
+
+  * added the build dependencies
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Fri, 23 Sep 2016 10:41:07 -0500
+
 qtlc3 (0.0-02) trusty; urgency=medium
 
   * Now have a cmake style build 
